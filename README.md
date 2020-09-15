@@ -12,7 +12,7 @@ description: "Vanilla JavaScript Single-page Application built with MSAL.js 2.x 
 
 <br>
 <div id="navbar">
-    <p>In this tutorial: authentication, B2C, identity providers</p>
+    <p>In this tutorial: authorization, B2C, bearer token</p>
     <a href="/">Previous Tutorial</a>
     <a href="/">Next Tutorial</a>
     <a href="/">All Tutorials</a>
@@ -135,7 +135,6 @@ Open the project in your IDE (like Visual Studio or Visual Studio Code) to confi
 1. Open the `App\authConfig.js` file.
 1. Find the key `clientId` and replace the existing value with the application ID (clientId) of the `ms-identity-b2c-javascript-callapi` application copied from the Azure portal.
 1. Find the key `redirectUri` and replace the existing value with the base address of the ms-identity-b2c-javascript-callapi project (by default `http://localhost:6420`).
-1. Find the key `postLogoutRedirectUri` and replace the existing value with the base address of the ms-identity-b2c-javascript-callapi project and the **signout** page that the app will redirect to e.g. `http://localhost:6420/signout`.
 
 1. Open the `App\policies.js` file.
 1. Find the key `names` and populate it with your policy names e.g. `signUpSignIn`.

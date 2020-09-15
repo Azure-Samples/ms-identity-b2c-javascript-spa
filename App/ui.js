@@ -7,8 +7,8 @@ const tableDiv = document.getElementById('table-div');
 const tableBody = document.getElementById('table-body-div');
 const editProfileButton = document.getElementById('editProfileButton');
 const callApiButton = document.getElementById('callApiButton');
-const label = document.getElementById('label');
 const response = document.getElementById("response");
+const label = document.getElementById('label');
 
 function welcomeUser(username) {
     label.classList.add('d-none');
