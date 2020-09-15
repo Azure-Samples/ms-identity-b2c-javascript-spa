@@ -1,7 +1,4 @@
-// helper function to access the resource with the token
 function callApi(endpoint, token) {
-
-    console.log(token);
     
     const headers = new Headers();
     const bearer = `Bearer ${token}`;
@@ -13,6 +10,8 @@ function callApi(endpoint, token) {
         headers: headers
       };
   
+    logMessage('Calling Web API...');
+    
     fetch(endpoint, options)
       .then(response => response.json())
       .then(response => {

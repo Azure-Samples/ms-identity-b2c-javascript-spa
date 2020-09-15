@@ -11,6 +11,7 @@ const label = document.getElementById('label');
 const response = document.getElementById("response");
 
 function welcomeUser(username) {
+    label.classList.add('d-none');
     signInButton.classList.add('d-none');
     signOutButton.classList.remove('d-none');
     titleDiv.classList.add('d-none');
@@ -20,7 +21,7 @@ function welcomeUser(username) {
     callApiButton.classList.remove('d-none');
 }
 
-// debug helper
+
 function logMessage(s) {
     response.appendChild(document.createTextNode('\n' + s + '\n'));
 }

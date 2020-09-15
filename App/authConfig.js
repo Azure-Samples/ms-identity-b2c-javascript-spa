@@ -17,29 +17,6 @@ const msalConfig = {
       cacheLocation: "localStorage", // Configures cache location. "sessionStorage" is more secure, but "localStorage" gives you SSO.
       storeAuthStateInCookie: false, // If you wish to store cache items in cookies as well as browser cache, set this to "true".
     },
-    system: {
-      loggerOptions: {
-        loggerCallback: (level, message, containsPii) => {
-          if (containsPii) {
-            return;
-          }
-          switch (level) {
-            case msal.LogLevel.Error:
-              console.error(message);
-              return;
-            case msal.LogLevel.Info:
-              console.info(message);
-              return;
-            case msal.LogLevel.Verbose:
-              console.debug(message);
-              return;
-            case msal.LogLevel.Warning:
-              console.warn(message);
-              return;
-          }
-        }
-      }
-    }
   };
   
 /**
@@ -52,8 +29,10 @@ const loginRequest = {
   scopes: ["openid", "profile", "offline_access"],
 };
 
-// Add here scopes for access token to be used at the API endpoints.
+/**
+ * Scopes you add here will be 
+ */
 const tokenRequest = {
-  scopes: [...apiConfig.b2cScopes, "offline_access"],  // e.g. ["https://fabrikamb2c.onmicrosoft.com/8c7ca6cd-b322-47a2-b8d0-b06fb20f9043/hello"]
+  scopes: [...apiConfig.b2cScopes, "offline_access"],  // e.g. ["https://fabrikamb2c.onmicrosoft.com/helloapi/demo.read"]
   forceRefresh: false // Set this to "true" to skip a cached token and go to the server to get a new token
 };

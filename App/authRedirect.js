@@ -25,7 +25,7 @@ myMSALObj.handleRedirectPromise()
 function selectAccount () {
 
     /**
-     * See here for more info on account retrieval: 
+     * See here for more information on account retrieval: 
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
      */
 
@@ -137,7 +137,6 @@ function getTokenRedirect(request) {
 // Acquires and access token and then passes it to the API call
 function passTokenToApi() {
    getTokenRedirect(tokenRequest);
-
    if (accessToken) {
         try {
             callApi(apiConfig.webApi, accessToken);

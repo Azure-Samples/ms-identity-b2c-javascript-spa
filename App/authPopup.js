@@ -63,7 +63,7 @@ function signIn() {
                         .then(response => {
                             console.log(response);
                             window.alert("Password has been reset successfully. \nPlease sign-in with your new password.");
-                        })
+                        });
                 }
             }
     });
@@ -96,7 +96,7 @@ selectAccount();
 function getTokenPopup(request) {
 
      /**
-     * See here for more info on account retrieval: 
+     * See here for more information on account retrieval: 
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
      */
 
@@ -121,16 +121,11 @@ function getTokenPopup(request) {
     });
 }
   
-// Acquires and access token and then passes it to the API call
 function passTokenToApi() {
     getTokenPopup(tokenRequest)
         .then(response => {
-            
-            console.log(response);
-
             if (response) {
                 console.log("access_token acquired at: " + new Date().toString());
-    
                 try {
                     callApi(apiConfig.webApi, response.accessToken);
                 } catch(error) {
