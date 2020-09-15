@@ -69,8 +69,8 @@ This sample demonstrates a Vanilla JavaScript single-page application that lets 
 - A modern web browser. This sample uses **ES6** conventions and will not run on **Internet Explorer**.
 - [Visual Studio Code](https://code.visualstudio.com/download) is recommended for running and editing this sample.
 - [VS Code Azure Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack) extension is recommended for interacting with Azure through VS Code Interface.
-- An Azure Active Directory (Azure AD) tenant. For more information on how to get an Azure AD tenant, see: [How to get an Azure AD tenant](https://azure.microsoft.com/documentation/articles/active-directory-howto-tenant/)
-- A user account in your Azure AD tenant.
+- An Azure Active Directory B2C (Azure AD B2C) tenant. For more information on how to get an Azure AD tenant, see: [Create an Azure Active Directory B2C tenant](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant)
+- A user account in your Azure AD B2C tenant.
 
 ## Setup
 
@@ -161,7 +161,7 @@ Open the project in your IDE (like Visual Studio or Visual Studio Code) to confi
 
 ### Acquire a Token
 
-Access Token requests in MSAL.js are meant to be per-resource-per-scope(s). This means that an Access Token requested for resource A with scope scp1:
+Access Token requests in **MSAL.js** are meant to be *per-resource-per-scope(s)*. This means that an Access Token requested for resource A with scope scp1:
 
 - cannot be used for accessing resource A with scope scp2, and,
 - cannot be used for accessing resource B of any scope.
