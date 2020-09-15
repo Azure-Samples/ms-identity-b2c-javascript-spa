@@ -113,7 +113,7 @@ If you don't have an Azure AD B2C tenant yet, please see: [Tutorial: Create an A
 1. In the **Register an application page** that appears, enter your application's registration information:
    - In the **Name** section, enter a meaningful application name that will be displayed to users of the app, for example `ms-identity-b2c-javascript-callapi`.
    - Under **Supported account types**, select **Accounts in any organizational directory or any identity provider. For authenticating users with Azure AD B2C**.
-   - In the **Redirect URI (optional)** section, select **Single-Page Application** in the combo-box and enter the following redirect URI: `http://localhost:6420/`.
+   - In the **Redirect URI (optional)** section, select **Single-Page Application** in the combo-box and enter the following redirect URI: `http://localhost:6420`.
 1. Select **Register** to create the application.
 1. In the app's registration screen, find and note the **Application (client) ID**. You use this value in your app's configuration file(s) later in your code.
 1. Select **Save** to save your changes.
@@ -162,11 +162,84 @@ Open the project in your IDE (like Visual Studio or Visual Studio Code) to confi
 
 ### Acquire a Token
 
+Access Token requests in MSAL.js are meant to be per-resource-per-scope(s). This means that an Access Token requested for resource A with scope scp1:
+
+- cannot be used for accessing resource A with scope scp2, and,
+- cannot be used for accessing resource B of any scope.
+
+The intended recipient of an Access Token is represented by the aud claim; in case the value for the `aud` claim does not mach the resource APP ID URI, the token should be considered invalid. Likewise, the permissions that an Access Token grants is represented by the `scp` claim. See [Access Token claims](https://docs.microsoft.com/azure/active-directory/develop/access-tokens#payload-claims) for more information.
+
+MSAL.js exposes 3 APIs for acquiring a token: `acquireTokenPopup()`, `acquireTokenRedirect()` and `acquireTokenSilent()`:
+
+```javascript
+    myMSALObj.acquireTokenPopup(request)
+        .then(response => {
+            // do something with response
+        })
+        .catch(error => {
+            console.log(error)
+        });
+```
+
+For `acquireTokenRedirect()`, you must register a redirect promise handler:
+
+```javascript
+    myMSALObj.handleRedirectPromise()
+        .then(response => {
+            // do something with response
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+    myMSALObj.acquireTokenRedirect(request);
+```
+
 ### Dynamic Scopes and Incremental Consent
+
+In Azure AD, the scopes (permissions) set directly on the application registration are called static scopes. Other scopes that are only defined within the code are called dynamic scopes. This has implications on the login (i.e. loginPopup, loginRedirect) and acquireToken (i.e. acquireTokenPopup, acquireTokenRedirect, acquireTokenSilent) methods of **MSAL.js**. Consider:
+
+```javascript
+     const loginRequest = {
+          scopes: [ "openid", "profile", "User.Read" ]
+     };
+     const tokenRequest = {
+          scopes: [ "Mail.Read" ]
+     };
+     // will return an ID Token and an Access Token with scopes: "openid", "profile" and "User.Read"
+     msalInstance.loginPopup(loginRequest);
+     // will fail and fallback to an interactive method prompting a consent screen
+     // after consent, the received token will be issued for "openid", "profile" ,"User.Read" and "Mail.Read" combined
+     msalInstance.acquireTokenSilent(tokenRequest);
+```
+
+In the code snippet above, the user will be prompted for consent once they authenticate and receive an ID Token and an Access Token with scope User.Read. Later, if they request an Access Token for User.Read, they will not be asked for consent again (in other words, they can acquire a token silently). On the other hand, the user did not consented to Mail.Read at the authentication stage. As such, they will be asked for consent when requesting an Access Token for that scope. The token received will contain all the previously consented scopes, hence the term incremental consent.
 
 ### Access Token validation
 
+Clients should treat access tokens as opaque strings, as the contents of the token are intended for the resource only (such as a web API or Microsoft Graph). For validation and debugging purposes, developers can decode **JWT**s (*JSON Web Tokens*) using a site like [jwt.ms](https://jwt.ms).
+
 ### Refresh Tokens and token lifetimes
+
+Access tokens in the browser have a default recommended expiration of 1 hour. After this 1 hour, any bearer calls with the expired token will be rejected. This token can be refreshed silently using the refresh token retrieved with this token. For more information, see: [Configurable token lifetimes in Microsoft identity platform](https://docs.microsoft.com/azure/active-directory/develop/active-directory-configurable-token-lifetimes)
+
+Refresh tokens given to Single-Page Applications are limited-time refresh tokens (usually 24 hours from the time of retrieval). This is a non-adjustable lifetime. Whenever a refresh token is used to renew an access token, a new refresh token is fetched with the renewed access token.
+
+The **MSAL.js** exposes the `acquireTokenSilent()` API which is meant to retrieve non-expired token silently.
+
+```javascript
+    msalInstance.acquireTokenSilent(request)
+        .then(tokenResponse => {
+        // Do something with the tokenResponse
+        }).catch(async (error) => {
+            if (error instanceof InteractionRequiredAuthError) {
+                // fallback to interaction when silent call fails
+                return myMSALObj.acquireTokenPopup(request);
+            }
+        }).catch(error => {
+            handleError(error);
+        });
+```
 
 ## Deployment
 
