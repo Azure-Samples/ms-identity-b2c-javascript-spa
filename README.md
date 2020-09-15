@@ -7,7 +7,7 @@ products:
   - microsoft-identity-platform
   - microsoft-authentication-library 
 urlFragment: ms-identity-b2c-javascript-callapi
-description: "Vanilla JavaScript Single-page Application built with MSAL.js 2.x using Authorization Code Flow (w/ PKCE) to authorize users to call a protected Web API"
+description: "Vanilla JavaScript Single-page Application built with MSAL.js 2.x using Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C"
 ---
 
 <br>
@@ -19,7 +19,7 @@ description: "Vanilla JavaScript Single-page Application built with MSAL.js 2.x 
 </div>
 <br>
 
-# Vanilla JavaScript Single-page Application built with MSAL.js 2.x using Authorization Code Flow (w/ PKCE) to authorize users to call a protected Web API
+# Vanilla JavaScript Single-page Application built with MSAL.js 2.x using Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C
 
  1. [Overview](#overview)
  1. [Scenario](#scenario)
@@ -103,8 +103,6 @@ As a first step you'll need to:
 
 1. Sign in to the [Azure portal](https://portal.azure.com).
 1. If your account is present in more than one Azure AD B2C tenant, select your profile at the top right corner in the menu on top of the page, and then **switch directory** to change your portal session to the desired Azure AD B2C tenant.
-
-If you don't have an Azure AD B2C tenant yet, please see: [Tutorial: Create an Azure Active Directory B2C tenant](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant).
 
 #### Register the app (ms-identity-b2c-javascript-callapi)
 
@@ -268,7 +266,7 @@ Build your project to get a distributable files folder, where your built `html`,
 1. In the pane that appears beside the **account overview page** of your storage account, select **Static Website**. The URL of your site appears in the **Primary endpoint field**.
 1. Update your `App\authConfig.js` with the **Primary endpoint field** as your new **Redirect URI**. In the next section, you will register this URI on the **Azure Portal**.
 
-### Update the Azure AD app registration for `ms-identity-b2c-javascript-callapi`
+### Update the Azure AD B2C app registration for `ms-identity-b2c-javascript-callapi`
 
 1. Navigate back to to the [Azure portal](https://portal.azure.com).
 1. In the left-hand navigation pane, select the **Azure AD B2C** service, and then select **App registrations**.
