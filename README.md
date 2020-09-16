@@ -19,7 +19,7 @@ description: "Vanilla JavaScript Single-page Application built with MSAL.js 2.x 
 </div>
 <br>
 
-# Vanilla JavaScript Single-page Application built with MSAL.js 2.x using Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C
+# Vanilla JavaScript Single-page Application with MSAL.js 2.x using Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C
 
  1. [Overview](#overview)
  1. [Scenario](#scenario)
@@ -55,9 +55,8 @@ This sample demonstrates a Vanilla JavaScript single-page application that lets 
 | `App/authPopup.js`    | Main authentication logic resides here (using Popup flow). |
 | `App/authRedirect.js` | Use this instead of `authPopup.js` for authentication with redirect flow. |
 | `App/authConfig.js`   | Contains configuration parameters for the sample. |
+| `App/apiConfig.js`   | Contains Web API scopes and coordinates. |
 | `App/policies.js`     | Contains B2C custom policies and user-flows.  |
-| `App/ui.js`           | Contains UI logic.                         |
-| `server.js`           | Simple Node server to `index.html`.        |
 | `ReadmeFiles/`        | Contains illustrations for README and etc. |
 | `CHANGELOG.md`        | List of changes to the sample.             |
 | `CONTRIBUTING.md`     | Guidelines for contributing to the sample. |
@@ -128,6 +127,11 @@ Open the project in your IDE (like Visual Studio or Visual Studio Code) to confi
 1. Find the key `clientId` and replace the existing value with the application ID (clientId) of the `ms-identity-b2c-javascript-callapi` application copied from the Azure portal.
 1. Find the key `redirectUri` and replace the existing value with the base address of the ms-identity-b2c-javascript-callapi project (by default `http://localhost:6420`).
 
+1. Open the `App\policies.js` file.
+1. Find the key `policies.names` and replace it with the names (IDs) of your policies/user-flows e.g. `b2c_1_susi`.
+1. Find the key `policies.authorities` abd replace it with the authority strings of your policies/user-flows e.g. `https://fabrikamb2c.b2clogin.com/fabrikamb2c.onmicrosoft.com/b2c_1_susi`.
+1. Find the key `policies.authorityDomain` abd replace it with the domain of your authority e.g. `fabrikamb2c.b2clogin.com`.
+
 1. Open the `App\apiConfig.js` file.
 1. Find the key `b2cScopes` and replace the existing value with the scope of your web API.
 1. Find the key `webAPI` and replace the existing value with the coordinates of your web API.
@@ -196,8 +200,10 @@ In Azure AD, the scopes (permissions) set directly on the application registrati
      const tokenRequest = {
           scopes: [ "Mail.Read" ]
      };
+
      // will return an ID Token and an Access Token with scopes: "openid", "profile" and "User.Read"
      msalInstance.loginPopup(loginRequest);
+
      // will fail and fallback to an interactive method prompting a consent screen
      // after consent, the received token will be issued for "openid", "profile" ,"User.Read" and "Mail.Read" combined
      msalInstance.acquireTokenSilent(tokenRequest);
