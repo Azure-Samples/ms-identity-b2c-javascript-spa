@@ -7,17 +7,12 @@ products:
   - microsoft-identity-platform
   - microsoft-authentication-library 
 urlFragment: ms-identity-b2c-javascript-callapi
-description: "Vanilla JavaScript Single-page Application built with MSAL.js 2.x using Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C"
+description: "Vanilla JavaScript Single-page Application built with MSAL.js 2.x using Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C (Azure AD B2C)"
 ---
 
-<br>
-<div id="navbar">
-    <p>In this tutorial: authorization, B2C, bearer token</p>
-    <a href="/">Previous Tutorial</a>
-    <a href="/">Next Tutorial</a>
-    <a href="/">All Tutorials</a>
-</div>
-<br>
+| In this Tutorial | Previous Tutorial | Next Tutorial | All Content |
+|------------------|------------------|----------------|------------|
+| authorization (B2C), token acquisition, access tokens, dynamic scopes, incremental consent | [Sign-in with Azure AD B2C](https://github.com/Azure-Samples/ms-identity-b2c-javascript-signin) | | [Table of Contents](https://github.com/Azure-Samples/ms-identity-javascript-tutorial) |
 
 # Vanilla JavaScript Single-page Application with MSAL.js 2.x using Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C
 
@@ -239,6 +234,8 @@ The **MSAL.js** exposes the `acquireTokenSilent()` API which is meant to retriev
 
 ## Deployment
 
+### Deployment to Azure Storage
+
 There is one single-page application in this sample. To deploy it to **Azure Storage**, you'll need to:
 
 - create an Azure Storage blob
@@ -247,9 +244,11 @@ There is one single-page application in this sample. To deploy it to **Azure Sto
 
 > :information_source: If you would like to use **VS Code Azure Tools** extension for deployment, [watch the tutorial](https://docs.microsoft.com/azure/developer/javascript/tutorial-vscode-static-website-node-01) offered by Microsoft Docs.
 
-### Build and upload the `ms-identity-b2c-javascript-callapi` to an Azure Storage blob
+#### Build and upload the `ms-identity-b2c-javascript-callapi` to an Azure Storage blob
 
 Build your project to get a distributable files folder, where your built `html`, `css` and `javascript` files will be generated. Then follow the steps below:
+
+> :warning: When uploading, make sure you upload the contents of your distributable files folder and **not** the entire folder itself.
 
 1. Sign in to the [Azure portal](https://portal.azure.com).
 1. Locate your storage account and display the account overview.
@@ -257,13 +256,13 @@ Build your project to get a distributable files folder, where your built `html`,
 1. Select **Enabled** to enable static website hosting for the storage account.
 1. In the **Index document name** field, specify a default index page (For example: `index.html`).
 1. The default **index page** is displayed when a user navigates to the root of your static website.
-1. Click **Save**. The Azure portal now displays your static website endpoint.
+1. Click **Save**. The Azure portal now displays your static website endpoint. Make a note of the **Primary endpoint field**.
+1. In the `ms-identity-b2c-javascript-signin` project source code, update your configuration file with the **Primary endpoint field** as your new **Redirect URI** (you will register this URI later).
 1. Next, select **Storage Explorer**.
 1. Expand the **BLOB CONTAINERS** node, and then select the `$web` container.
 1. Choose the **Upload** button to upload files.
 1. If you intend for the browser to display the contents of file, make sure that the content type of that file is set to `text/html`.
-1. In the pane that appears beside the **account overview page** of your storage account, select **Static Website**. The URL of your site appears in the **Primary endpoint field**.
-1. Update your `App\authConfig.js` with the **Primary endpoint field** as your new **Redirect URI**. In the next section, you will register this URI on the **Azure Portal**.
+1. In the pane that appears beside the **account overview page** of your storage account, select **Static Website**. The URL of your site appears in the **Primary endpoint field**. In the next section, you will register this URI.
 
 ### Update the Azure AD B2C app registration for `ms-identity-b2c-javascript-callapi`
 
