@@ -30,7 +30,9 @@ const loginRequest = {
 };
 
 /**
- * Scopes you add here will be 
+ * Scopes you add here will be used to request a token from Azure AD B2C to be used for accessing a protected resource.
+ * To learn more about how to work with scopes and resources, see: 
+ * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md
  */
 const tokenRequest = {
   scopes: [...apiConfig.b2cScopes, "offline_access"],  // e.g. ["https://fabrikamb2c.onmicrosoft.com/helloapi/demo.read"]
