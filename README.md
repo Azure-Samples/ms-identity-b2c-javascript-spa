@@ -5,16 +5,12 @@ languages:
 products:
   - azure-active-directory-b2c
   - microsoft-identity-platform
-  - microsoft-authentication-library 
+name: Vanilla JavaScript Single-page Application secured with MSAL.js 2.x using the Authorization Code Flow (PKCE) on Azure AD B2C
 urlFragment: ms-identity-b2c-javascript-callapi
-description: "Vanilla JavaScript Single-page Application built with MSAL.js 2.x using Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C (Azure AD B2C)"
+description: "This sample demonstrates a Vanilla JavaScript Single-page Application with MSAL.js 2.x using the Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C"
 ---
 
-| In this Tutorial | Previous Tutorial | Next Tutorial | All Content |
-|------------------|------------------|----------------|------------|
-| authorization (B2C), token acquisition, access tokens, dynamic scopes, incremental consent | [Sign-in with Azure AD B2C](https://github.com/Azure-Samples/ms-identity-b2c-javascript-signin) | | [Table of Contents](https://github.com/Azure-Samples/ms-identity-javascript-tutorial) |
-
-# Vanilla JavaScript Single-page Application with MSAL.js 2.x using Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C
+# Vanilla JavaScript Single-page Application secured with MSAL.js 2.x using the Authorization Code Flow (PKCE) on Azure AD B2C
 
  1. [Overview](#overview)
  1. [Scenario](#scenario)
@@ -33,29 +29,25 @@ description: "Vanilla JavaScript Single-page Application built with MSAL.js 2.x 
 
 ## Overview
 
-This sample demonstrates a Vanilla JavaScript single-page application that lets users authenticate against [Azure Active Directory B2C](https://azure.microsoft.com/services/active-directory/external-identities/b2c/) using the [Microsoft Authentication Library for JavaScript \(MSAL\.js\)](https://github.com/AzureAD/microsoft-authentication-library-for-js) and authorize them to call a web API that is also protected by **Azure AD B2C**. In doing so, it also illustrates various authorization and B2C concepts, such as [Access Tokens](https://docs.microsoft.com/azure/active-directory/develop/access-tokens), [Refresh Tokens](https://docs.microsoft.com/azure/active-directory-b2c/tokens-overview#token-types), [Token Lifetimes and Configuration](https://docs.microsoft.com/azure/active-directory-b2c/tokens-overview#configuration), [Authorization Code Grant](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-auth-code-flow), [Dynamic Scopes and Incremental Consent](https://docs.microsoft.com/azure/active-directory/develop/v2-permissions-and-consent), **silent requests** and more.
-
-![Overview](./ReadmeFiles/topology.png)
+This sample demonstrates a Vanilla JavaScript single-page application that lets users authenticate against [Azure Active Directory B2C](https://azure.microsoft.com/services/active-directory/external-identities/b2c/) (Azure AD B2C) using the [Microsoft Authentication Library for JavaScript](https://github.com/AzureAD/microsoft-authentication-library-for-js) (MSAL.js) and authorize them to call a web API that is also protected by **Azure AD B2C**.
 
 ## Scenario
 
 1. The client application uses the **MSAL.js** to obtain an **Access Token** from **Azure AD B2C**.
-2. The **Access Token** is used as a **bearer** to *authorize* the user to call a protected web API.
+1. The **Access Token** is used as a **bearer** to *authorize* the user to call a protected web API.
+1. The protected web API responds with the name of the signed-in user.
+
+![Overview](./ReadmeFiles/topology.png)
 
 ## Contents
 
 | File/folder           | Description                                |
 |-----------------------|--------------------------------------------|
-| `App/`                | Contains sample source code.               |
-| `App/authPopup.js`    | Main authentication logic resides here (using Popup flow). |
+| `App/authPopup.js`    | Main authentication logic resides here (using popup flow). |
 | `App/authRedirect.js` | Use this instead of `authPopup.js` for authentication with redirect flow. |
 | `App/authConfig.js`   | Contains configuration parameters for the sample. |
-| `App/apiConfig.js`   | Contains Web API scopes and coordinates. |
+| `App/apiConfig.js`    | Contains Web API scopes and coordinates. |
 | `App/policies.js`     | Contains B2C custom policies and user-flows.  |
-| `ReadmeFiles/`        | Contains illustrations for README and etc. |
-| `CHANGELOG.md`        | List of changes to the sample.             |
-| `CONTRIBUTING.md`     | Guidelines for contributing to the sample. |
-| `LICENSE`             | The license for the sample.                |
 
 ## Prerequisites
 
@@ -98,7 +90,7 @@ or download and extract the repository .zip file.
 As a first step you'll need to:
 
 1. Sign in to the [Azure portal](https://portal.azure.com).
-1. If your account is present in more than one Azure AD B2C tenant, select your profile at the top right corner in the menu on top of the page, and then **switch directory** to change your portal session to the desired Azure AD B2C tenant.
+1. If your account is present in more than one **Azure AD B2C** tenant, select your profile at the top right corner in the menu on top of the page, and then **switch directory** to change your portal session to the desired **Azure AD B2C** tenant.
 
 #### Register the app (ms-identity-b2c-javascript-callapi)
 
@@ -106,28 +98,31 @@ As a first step you'll need to:
 1. Select **New registration**.
 1. In the **Register an application page** that appears, enter your application's registration information:
    - In the **Name** section, enter a meaningful application name that will be displayed to users of the app, for example `ms-identity-b2c-javascript-callapi`.
-   - Under **Supported account types**, select **Accounts in any organizational directory or any identity provider. For authenticating users with Azure AD B2C**.
-   - In the **Redirect URI (optional)** section, select **Web** in the combo-box and enter the following redirect URI: `http://localhost:6420`.
+   - Under **Supported account types**, select **Accounts in any organizational directory or any identity provider**.
+   - In the **Redirect URI (optional)** section, select **Single-page application** in the combo-box and enter the following redirect URI: `http://localhost:6420`.
 1. Select **Register** to create the application.
 1. In the app's registration screen, find and note the **Application (client) ID**. You use this value in your app's configuration file(s) later in your code.
 1. Select **Save** to save your changes.
 
 #### Configure the app (ms-identity-b2c-javascript-callapi) to use your app registration
 
-Open the project in your IDE (like Visual Studio or Visual Studio Code) to configure the code.
+Open the project in your IDE (like Visual Studio Code) to configure the code.
 
 > In the steps below, "ClientID" is the same as "Application ID" or "AppId".
 
-1. Open the `App\authConfig.js` file.
+Open the `App\authConfig.js` file. Then:
+
 1. Find the key `clientId` and replace the existing value with the application ID (clientId) of the `ms-identity-b2c-javascript-callapi` application copied from the Azure portal.
 1. Find the key `redirectUri` and replace the existing value with the base address of the ms-identity-b2c-javascript-callapi project (by default `http://localhost:6420`).
 
-1. Open the `App\policies.js` file.
+Open the `App\policies.js` file. Then:
+
 1. Find the key `policies.names` and replace it with the names (IDs) of your policies/user-flows e.g. `b2c_1_susi`.
 1. Find the key `policies.authorities` abd replace it with the authority strings of your policies/user-flows e.g. `https://fabrikamb2c.b2clogin.com/fabrikamb2c.onmicrosoft.com/b2c_1_susi`.
 1. Find the key `policies.authorityDomain` abd replace it with the domain of your authority e.g. `fabrikamb2c.b2clogin.com`.
 
-1. Open the `App\apiConfig.js` file.
+Open the `App\apiConfig.js` file. Then:
+
 1. Find the key `b2cScopes` and replace the existing value with the scope of your web API.
 1. Find the key `webAPI` and replace the existing value with the coordinates of your web API.
 
@@ -145,18 +140,93 @@ Open the project in your IDE (like Visual Studio or Visual Studio Code) to confi
 
 ![Screenshot](./ReadmeFiles/screenshot.png)
 
-> :information_source: Did the sample not work for you as expected? Then please reach out to us using the [GitHub Issues](../../../../issues) page.
+> :thought_balloon: Consider taking a moment to [share your experience with us]()
 
 ## About the code
 
+## Sign-in
+
+MSAL.js provides 3 login APIs: `loginPopup()`, `loginRedirect()` and `ssoSilent()`:
+
+```javascript
+    myMSALObj.loginPopup(loginRequest)
+        .then((response) => {
+            // your logic
+        })
+        .catch(error => {
+            console.error(error);
+        });
+```
+
+To use the redirect flow, you must register a handler for redirect promise. **MSAL.js** provides `handleRedirectPromise()` API:
+
+```javascript
+    myMSALObj.handleRedirectPromise()
+        .then((response) => {
+            // your logic
+        })
+        .catch(err => {
+            console.error(err);
+        });
+
+    myMSALObj.loginRedirect(loginRequest);
+```
+
+The recommended pattern is that you fallback to an **interactive method** should the silent SSO fails.
+
+```javascript
+
+    const silentRequest = {
+      scopes: ["openid", "profile"],
+      loginHint: "example@domain.net"
+    };
+
+    myMSALObj.ssoSilent(silentRequest)
+        .then((response) => {
+            // your logic
+        }).catch(error => {
+            console.error("Silent Error: " + error);
+            if (error instanceof msal.InteractionRequiredAuthError) {
+                myMSALObj.loginRedirect(loginRequest);
+            }
+        });
+```
+
+You can pass custom query string parameters to your sign-in request, using the `extraQueryParameters` property. For instance, in order to customize your B2C user interface, you can:
+
+```javascript
+    const loginRequest = {
+      scopes: ["openid", "profile"],
+      extraQueryParameters: { campaignId: 'hawaii', ui_locales: 'es' }
+    };
+
+    myMSALObj.loginRedirect(loginRequest);
+```
+
+See here for more: [Customize the user interface of your application in Azure AD B2C](https://docs.microsoft.com/azure/active-directory-b2c/custom-policy-ui-customization)
+
+You can get all the active accounts of a signed-in user with the get `getAllAccounts()` API. If you know the **home ID** of an account, you can select it by:
+
+```javascript
+    myMSALObj.getAccountByHomeId(homeId);
+```
+
+> :warning: MSAL.js also provides a `getAccountByUsername()` API, which is not recommended with B2C as the B2C server may not return a username and as such, **home ID** is a more robust identifier to select an account.
+
+### Sign-out
+
+The application redirects the user to the **Microsoft identity platform** logout endpoint to sign out. This endpoint clears the user's session from the browser. If your app did not go to the logout endpoint, the user may re-authenticate to your app without entering their credentials again, because they would have a valid single sign-in session with the **Microsoft identity platform** endpoint. See for more: [Send a sign-out request](https://docs.microsoft.com/azure/active-directory/develop/v2-protocols-oidc#send-a-sign-out-request).
+
+The sign-out clears the user's single sign-on session with **Azure AD B2C**, but it might not sign the user out of their **social identity provider** session. If the user selects the same identity provider during a subsequent sign-in, they might re-authenticate without entering their credentials. Here the assumption is that, if a user wants to sign out of the application, it doesn't necessarily mean they want to sign out of their social account (e.g. Facebook) itself.
+
 ### Acquire a Token
 
-Access Token requests in **MSAL.js** are meant to be *per-resource-per-scope(s)*. This means that an Access Token requested for resource A with scope scp1:
+Access Token requests in **MSAL.js** are meant to be *per-resource-per-scope(s)*. This means that an **Access Token** requested for resource A with scope `scp1`:
 
-- cannot be used for accessing resource A with scope scp2, and,
-- cannot be used for accessing resource B of any scope.
+- cannot be used for accessing resource **A** with scope `scp2`, and,
+- cannot be used for accessing resource **B** of any scope.
 
-The intended recipient of an Access Token is represented by the aud claim; in case the value for the `aud` claim does not mach the resource APP ID URI, the token should be considered invalid. Likewise, the permissions that an Access Token grants is represented by the `scp` claim. See [Access Token claims](https://docs.microsoft.com/azure/active-directory/develop/access-tokens#payload-claims) for more information.
+The intended recipient of an **Access Token** is represented by the `aud` claim; in case the value for the `aud` claim does not mach the resource `APP ID URI`, the token should be considered invalid. Likewise, the permissions that an **Access Token** grants is represented by the `scp` claim. See [Access Token claims](https://docs.microsoft.com/azure/active-directory/develop/access-tokens#payload-claims) for more information.
 
 MSAL.js exposes 3 APIs for acquiring a token: `acquireTokenPopup()`, `acquireTokenRedirect()` and `acquireTokenSilent()`:
 
@@ -184,42 +254,24 @@ For `acquireTokenRedirect()`, you must register a redirect promise handler:
     myMSALObj.acquireTokenRedirect(request);
 ```
 
-### Dynamic Scopes and Incremental Consent
+### ID Token validation
 
-In Azure AD, the scopes (permissions) set directly on the application registration are called static scopes. Other scopes that are only defined within the code are called dynamic scopes. This has implications on the login (i.e. loginPopup, loginRedirect) and acquireToken (i.e. acquireTokenPopup, acquireTokenRedirect, acquireTokenSilent) methods of **MSAL.js**. Consider:
-
-```javascript
-     const loginRequest = {
-          scopes: [ "openid", "profile", "User.Read" ]
-     };
-     const tokenRequest = {
-          scopes: [ "Mail.Read" ]
-     };
-
-     // will return an ID Token and an Access Token with scopes: "openid", "profile" and "User.Read"
-     msalInstance.loginPopup(loginRequest);
-
-     // will fail and fallback to an interactive method prompting a consent screen
-     // after consent, the received token will be issued for "openid", "profile" ,"User.Read" and "Mail.Read" combined
-     msalInstance.acquireTokenSilent(tokenRequest);
-```
-
-In the code snippet above, the user will be prompted for consent once they authenticate and receive an ID Token and an Access Token with scope User.Read. Later, if they request an Access Token for User.Read, they will not be asked for consent again (in other words, they can acquire a token silently). On the other hand, the user did not consented to Mail.Read at the authentication stage. As such, they will be asked for consent when requesting an Access Token for that scope. The token received will contain all the previously consented scopes, hence the term incremental consent.
+A single-page application does not benefit from validating ID tokens, since the application runs without a back-end and as such, attackers can intercept and edit the keys used for validation of the token.
 
 ### Access Token validation
 
-Clients should treat access tokens as opaque strings, as the contents of the token are intended for the resource only (such as a web API or Microsoft Graph). For validation and debugging purposes, developers can decode **JWT**s (*JSON Web Tokens*) using a site like [jwt.ms](https://jwt.ms).
+Clients should treat access tokens as opaque strings, as the contents of the token are intended for the resource only (such as a web API). For validation and debugging purposes, developers can decode **JWT**s (*JSON Web Tokens*) using a site like [jwt.ms](https://jwt.ms).
 
 ### Refresh Tokens and token lifetimes
 
 Access tokens in the browser have a default recommended expiration of 1 hour. After this 1 hour, any bearer calls with the expired token will be rejected. This token can be refreshed silently using the refresh token retrieved with this token. For more information, see: [Configurable token lifetimes in Microsoft identity platform](https://docs.microsoft.com/azure/active-directory/develop/active-directory-configurable-token-lifetimes)
 
-Refresh tokens given to Single-Page Applications are limited-time refresh tokens (usually 24 hours from the time of retrieval). This is a non-adjustable lifetime. Whenever a refresh token is used to renew an access token, a new refresh token is fetched with the renewed access token.
+Refresh tokens given to single-page applications are limited-time refresh tokens (usually 24 hours from the time of retrieval). This is a non-adjustable lifetime. Whenever a refresh token is used to renew an access token, a new refresh token is fetched with the renewed access token.
 
-The **MSAL.js** exposes the `acquireTokenSilent()` API which is meant to retrieve non-expired token silently.
+The **MSAL.js** exposes the `acquireTokenSilent()` API which is meant to retrieve a non-expired token silently.
 
 ```javascript
-    msalInstance.acquireTokenSilent(request)
+    myMSALObj.acquireTokenSilent(request)
         .then(tokenResponse => {
         // Do something with the tokenResponse
         }).catch(async (error) => {
@@ -229,6 +281,89 @@ The **MSAL.js** exposes the `acquireTokenSilent()` API which is meant to retriev
             }
         }).catch(error => {
             handleError(error);
+        });
+```
+
+### Integrating user-flows
+
+- **Sign-up/sign-in**
+
+This user-flow allows your users to sign-in to your application if the user has an account already, or sign-up for an account if not. This is the default user-flow that we pass during the initialization of MSAL instance.
+
+- **Password reset**
+
+When a user clicks on the **forgot your password?** link during sign-in, **Azure AD B2C** will throw an error. To initiate the password reset user-flow, you need to catch this error and handle it by sending another login request with the corresponding password reset authority string.
+
+```javascript
+    myMSALObj.loginPopup(loginRequest)
+        .then(handleResponse)
+        .catch(error => {
+            console.error(error);
+
+            if (error.errorMessage) {
+                if (error.errorMessage.indexOf("AADB2C90118") > -1) {
+                myMSALObj.loginPopup(b2cPolicies.authorities.forgotPassword)
+                    .then(response => {
+                        console.log(response);
+                        window.alert("Password has been reset successfully. \nPlease sign-in with your new password.");
+                    })
+                }
+            }
+    });
+```
+
+In case if you are using redirect flow, you should catch the error inside `handleRedirectPromise()`:
+
+```javascript
+    myMSALObj.handleRedirectPromise()
+        .then(handleResponse)
+        .catch(error => {
+            console.error(error);
+
+            if (error.errorMessage.indexOf("AADB2C90118") > -1) {
+                try {
+                    myMSALObj.loginRedirect(b2cPolicies.authorities.forgotPassword);
+                } catch(err) {
+                    console.log(err);
+                }
+            }
+        });
+```
+
+Then, in `handleResponse()`:
+
+```javascript
+    function handleResponse(response) {
+        if (response !== null) {
+
+            if (response.idTokenClaims['acr'] === b2cPolicies.names.forgotPassword) {
+                window.alert("Password has been reset successfully. \nPlease sign-in with your new password.");
+
+                const logoutRequest = {
+                    account: myMSALObj.getAccountByHomeId(accountId),
+                    postLogoutRedirectUri: "http://localhost:6420"
+                };
+
+                myMSALObj.logout(logoutRequest);
+            } else if (response.idTokenClaims['acr'] === b2cPolicies.names.editProfile) {
+                window.alert("Profile has been updated successfully.");
+            } else {
+                // sign-in as usual
+            }
+        }
+    }
+```
+
+- **Edit Profile**
+
+Unlike password reset, edit profile user-flow does not require users to sign-out and sign-in again. Instead, **MSAL.js** will handle
+switching back to the authority string of the default user-flow automatically.
+
+```javascript
+    myMSALObj.loginPopup(b2cPolicies.authorities.editProfile)
+        .then(response => {
+            console.log(response);
+            // your logic here
         });
 ```
 
@@ -269,7 +404,7 @@ Build your project to get a distributable files folder, where your built `html`,
 1. Navigate back to to the [Azure portal](https://portal.azure.com).
 1. In the left-hand navigation pane, select the **Azure AD B2C** service, and then select **App registrations**.
 1. In the resulting screen, select the `ms-identity-b2c-javascript-callapi` application.
-1. From the *Branding* menu, update the **Home page URL**, to the address of your service, for example [https://contoso.azurewebsites.net](https://ms-identity-b2c-javascript-callapi-contoso.azurewebsites.net). Save the configuration.
+1. From the *Branding* menu, update the **Home page URL**, to the address of your service, for example `https://ms-identity-b2c-javascript-callapi`. Save the configuration.
 1. Add the same URI in the list of values of the *Authentication -> Redirect URIs* menu. If you have multiple redirect URIs, make sure that there a new entry using the App service's URI for each redirect URI.
 
 ## More information

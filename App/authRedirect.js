@@ -2,7 +2,6 @@
 // configuration parameters are located at authConfig.js
 const myMSALObj = new msal.PublicClientApplication(msalConfig);
 
-let accessToken;
 let accountId = "";
 let username = "";
 
@@ -108,10 +107,6 @@ function signOut() {
     myMSALObj.logout(logoutRequest);
 }
 
-function editProfile() {
-    myMSALObj.loginRedirect(b2cPolicies.authorities.editProfile);
-}
-
 function getTokenRedirect(request) {
 
     /**
@@ -144,4 +139,8 @@ function passTokenToApi() {
             console.warn(error); 
         }
     }
+}
+
+function editProfile() {
+    myMSALObj.loginRedirect(b2cPolicies.authorities.editProfile);
 }

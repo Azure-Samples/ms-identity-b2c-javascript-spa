@@ -2,7 +2,7 @@
  * Configuration object to be passed to MSAL instance on creation. 
  * For a full list of MSAL.js configuration parameters, visit:
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/configuration.md
- * For more details on MSAL.js and Azure AD B2C, visit:
+ * For more details on using MSAL.js with Azure AD B2C, visit:
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/working-with-b2c.md 
  */
 
@@ -26,7 +26,7 @@ const msalConfig = {
  * https://docs.microsoft.com/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
 const loginRequest = {
-  scopes: ["openid", "profile", "offline_access"],
+  scopes: ["openid"],
 };
 
 /**
@@ -35,6 +35,6 @@ const loginRequest = {
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md
  */
 const tokenRequest = {
-  scopes: [...apiConfig.b2cScopes, "offline_access"],  // e.g. ["https://fabrikamb2c.onmicrosoft.com/helloapi/demo.read"]
+  scopes: [...apiConfig.b2cScopes],  // e.g. ["https://fabrikamb2c.onmicrosoft.com/helloapi/demo.read"]
   forceRefresh: false // Set this to "true" to skip a cached token and go to the server to get a new token
 };

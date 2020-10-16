@@ -26,6 +26,8 @@ function selectAccount () {
     }
 }
 
+selectAccount();
+
 function handleResponse(response) {
     console.log(response);
     /**
@@ -84,15 +86,6 @@ function signOut() {
     myMSALObj.logout(logoutRequest);
 }
 
-function editProfile() {
-    myMSALObj.loginPopup(b2cPolicies.authorities.editProfile)
-      .then(response => {
-          console.log(response);
-      });
-}
-
-selectAccount();
-
 function getTokenPopup(request) {
 
      /**
@@ -133,4 +126,11 @@ function passTokenToApi() {
                 }
             }
         });
+}
+
+function editProfile() {
+    myMSALObj.loginPopup(b2cPolicies.authorities.editProfile)
+      .then(response => {
+          console.log(response);
+      });
 }
