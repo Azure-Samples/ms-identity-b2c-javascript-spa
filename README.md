@@ -5,12 +5,12 @@ languages:
 products:
   - azure-active-directory-b2c
   - microsoft-identity-platform
-name: Vanilla JavaScript Single-page Application secured with MSAL.js 2.x using the Authorization Code Flow (PKCE) on Azure AD B2C
-urlFragment: ms-identity-b2c-javascript-callapi
-description: "This sample demonstrates a Vanilla JavaScript Single-page Application with MSAL.js 2.x using the Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C"
+name: Vanilla JavaScript Single-page Application secured with MSAL.js using the Authorization Code Flow (PKCE) on Azure AD B2C
+urlFragment: ms-identity-b2c-javascript-spa
+description: "This sample demonstrates a Vanilla JavaScript Single-page Application with MSAL.js using the Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C"
 ---
 
-# Vanilla JavaScript Single-page Application secured with MSAL.js 2.x using the Authorization Code Flow (PKCE) on Azure AD B2C
+# Vanilla JavaScript Single-page Application secured with MSAL.js using the Authorization Code Flow (PKCE) on Azure AD B2C
 
  1. [Overview](#overview)
  1. [Scenario](#scenario)
@@ -64,7 +64,7 @@ This sample demonstrates a Vanilla JavaScript single-page application that lets 
 From your shell or command line:
 
 ```console
-git clone https://github.com/Azure-Samples/ms-identity-b2c-javascript-callapi.git
+git clone https://github.com/Azure-Samples/ms-identity-b2c-javascript-spa.git
 ```
 
 or download and extract the repository .zip file.
@@ -74,7 +74,7 @@ or download and extract the repository .zip file.
 ### Step 2: Install project dependencies
 
 ```console
-    cd ms-identity-b2c-javascript-callapi
+    cd ms-identity-b2c-javascript-spa
     npm install
 ```
 
@@ -91,19 +91,19 @@ As a first step you'll need to:
 1. Sign in to the [Azure portal](https://portal.azure.com).
 1. If your account is present in more than one **Azure AD B2C** tenant, select your profile at the top right corner in the menu on top of the page, and then **switch directory** to change your portal session to the desired **Azure AD B2C** tenant.
 
-#### Register the app (ms-identity-b2c-javascript-callapi)
+#### Register the app (ms-identity-b2c-javascript-spa)
 
 1. Navigate to the Microsoft identity platform for developers [App registrations](https://go.microsoft.com/fwlink/?linkid=2083908) page.
 1. Select **New registration**.
 1. In the **Register an application page** that appears, enter your application's registration information:
-   - In the **Name** section, enter a meaningful application name that will be displayed to users of the app, for example `ms-identity-b2c-javascript-callapi`.
+   - In the **Name** section, enter a meaningful application name that will be displayed to users of the app, for example `ms-identity-b2c-javascript-spa`.
    - Under **Supported account types**, select **Accounts in any organizational directory or any identity provider**.
    - In the **Redirect URI (optional)** section, select **Single-page application** in the combo-box and enter the following redirect URI: `http://localhost:6420`.
 1. Select **Register** to create the application.
 1. In the app's registration screen, find and note the **Application (client) ID**. You use this value in your app's configuration file(s) later in your code.
 1. Select **Save** to save your changes.
 
-#### Configure the app (ms-identity-b2c-javascript-callapi) to use your app registration
+#### Configure the app (ms-identity-b2c-javascript-spa) to use your app registration
 
 Open the project in your IDE (like Visual Studio Code) to configure the code.
 
@@ -111,8 +111,8 @@ Open the project in your IDE (like Visual Studio Code) to configure the code.
 
 Open the `App\authConfig.js` file. Then:
 
-1. Find the key `clientId` and replace the existing value with the application ID (clientId) of the `ms-identity-b2c-javascript-callapi` application copied from the Azure portal.
-1. Find the key `redirectUri` and replace the existing value with the base address of the ms-identity-b2c-javascript-callapi project (by default `http://localhost:6420`).
+1. Find the key `clientId` and replace the existing value with the application ID (clientId) of the `ms-identity-b2c-javascript-spa` application copied from the Azure portal.
+1. Find the key `redirectUri` and replace the existing value with the base address of the ms-identity-b2c-javascript-spa project (by default `http://localhost:6420`).
 
 Open the `App\policies.js` file. Then:
 
@@ -128,7 +128,7 @@ Open the `App\apiConfig.js` file. Then:
 ## Running the sample
 
 ```console
-    cd ms-identity-b2c-javascript-callapi
+    cd ms-identity-b2c-javascript-spa
     npm start
 ```
 
@@ -153,7 +153,7 @@ There is one single-page application in this sample. To deploy it to **Azure Sto
 
 > :information_source: If you would like to use **VS Code Azure Tools** extension for deployment, [watch the tutorial](https://docs.microsoft.com/azure/developer/javascript/tutorial-vscode-static-website-node-01) offered by Microsoft Docs.
 
-#### Build and upload the `ms-identity-b2c-javascript-callapi` to an Azure Storage blob
+#### Build and upload the `ms-identity-b2c-javascript-spa` to an Azure Storage blob
 
 Build your project to get a distributable files folder, where your built `html`, `css` and `javascript` files will be generated. Then follow the steps below:
 
@@ -173,12 +173,12 @@ Build your project to get a distributable files folder, where your built `html`,
 1. If you intend for the browser to display the contents of file, make sure that the content type of that file is set to `text/html`.
 1. In the pane that appears beside the **account overview page** of your storage account, select **Static Website**. The URL of your site appears in the **Primary endpoint field**. In the next section, you will register this URI.
 
-### Update the Azure AD B2C app registration for `ms-identity-b2c-javascript-callapi`
+### Update the Azure AD B2C app registration for `ms-identity-b2c-javascript-spa`
 
 1. Navigate back to to the [Azure portal](https://portal.azure.com).
 1. In the left-hand navigation pane, select the **Azure AD B2C** service, and then select **App registrations**.
-1. In the resulting screen, select the `ms-identity-b2c-javascript-callapi` application.
-1. From the *Branding* menu, update the **Home page URL**, to the address of your service, for example `https://ms-identity-b2c-javascript-callapi`. Save the configuration.
+1. In the resulting screen, select the `ms-identity-b2c-javascript-spa` application.
+1. From the *Branding* menu, update the **Home page URL**, to the address of your service, for example `https://ms-identity-b2c-javascript-spa`. Save the configuration.
 1. Add the same URI in the list of values of the *Authentication -> Redirect URIs* menu. If you have multiple redirect URIs, make sure that there a new entry using the App service's URI for each redirect URI.
 
 ## More information
