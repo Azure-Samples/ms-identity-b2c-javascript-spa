@@ -82,7 +82,7 @@ or download and extract the repository .zip file.
 
 > :information_source: This sample comes with a pre-registered application for testing purposes. If you would like to use your own **Azure AD B2C** tenant and application, follow the steps below to register and configure the applications in the **Azure Portal**. Otherwise, continue with the steps for [Running the sample](#running-the-sample).
 
-> :information_source: This sample is calling a web API that is already protected by Azure AD B2C and hosted on Azure websites. If you would like to setup and use your own web API, follow the instructions on the [Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi) sample. Otherwise, continue with the steps for [Running the sample](#running-the-sample).
+> :information_source: This sample is calling a web API that is already protected by **Azure AD B2C** and hosted on **Azure App Service**. If you would like to setup and use your own web API, follow the instructions for [Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi) sample. Otherwise, continue with the steps for [Running the sample](#running-the-sample).
 
 ### Choose the Azure AD B2C tenant where you want to create your applications
 
@@ -103,6 +103,14 @@ As a first step you'll need to:
 1. In the app's registration screen, find and note the **Application (client) ID**. You use this value in your app's configuration file(s) later in your code.
 1. Select **Save** to save your changes.
 
+### Create User Flows
+
+Please refer to: [Tutorial: Create user flows in Azure Active Directory B2C](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-user-flows)
+
+### Add External Identity Providers
+
+Please refer to: [Tutorial: Add identity providers to your applications in Azure Active Directory B2C](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-add-identity-providers)
+
 #### Configure the app (ms-identity-b2c-javascript-spa) to use your app registration
 
 Open the project in your IDE (like Visual Studio Code) to configure the code.
@@ -122,8 +130,8 @@ Open the `App\policies.js` file. Then:
 
 Open the `App\apiConfig.js` file. Then:
 
-1. Find the key `b2cScopes` and replace the existing value with the scope of your web API.
-1. Find the key `webAPI` and replace the existing value with the coordinates of your web API.
+1. Find the key `b2cScopes` and replace the existing value with the scope of your web API (if you have followed the [Tutorial: Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi) above, this is `api://{your-web-apis-client-id}/access_as_user`).
+1. Find the key `webAPI` and replace the existing value with the coordinates of your web API (if you have followed the [Tutorial: Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi) above, this is `http://localhost:5000`).
 
 ## Running the sample
 
@@ -166,7 +174,7 @@ Build your project to get a distributable files folder, where your built `html`,
 1. In the **Index document name** field, specify a default index page (For example: `index.html`).
 1. The default **index page** is displayed when a user navigates to the root of your static website.
 1. Click **Save**. The Azure portal now displays your static website endpoint. Make a note of the **Primary endpoint field**.
-1. In the `ms-identity-b2c-javascript-signin` project source code, update your configuration file with the **Primary endpoint field** as your new **Redirect URI** (you will register this URI later).
+1. In the `ms-identity-b2c-javascript-spa` project source code, update your configuration file with the **Primary endpoint field** as your new **Redirect URI** (you will register this URI later).
 1. Next, select **Storage Explorer**.
 1. Expand the **BLOB CONTAINERS** node, and then select the `$web` container.
 1. Choose the **Upload** button to upload files.
@@ -178,8 +186,7 @@ Build your project to get a distributable files folder, where your built `html`,
 1. Navigate back to to the [Azure portal](https://portal.azure.com).
 1. In the left-hand navigation pane, select the **Azure AD B2C** service, and then select **App registrations**.
 1. In the resulting screen, select the `ms-identity-b2c-javascript-spa` application.
-1. From the *Branding* menu, update the **Home page URL**, to the address of your service, for example `https://ms-identity-b2c-javascript-spa`. Save the configuration.
-1. Add the same URI in the list of values of the *Authentication -> Redirect URIs* menu. If you have multiple redirect URIs, make sure that there a new entry using the App service's URI for each redirect URI.
+1. Add the same URI in the list of values of the *Authentication -> Redirect URIs* menu. If you have multiple redirect URIs, make sure that there's a new entry using the **Azure Storage**'s static website endpoint URI for each redirect URI.
 
 ## More information
 
