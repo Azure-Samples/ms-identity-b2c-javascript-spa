@@ -82,8 +82,6 @@ or download and extract the repository .zip file.
 
 > :information_source: This sample comes with a pre-registered application for testing purposes. If you would like to use your own **Azure AD B2C** tenant and application, follow the steps below to register and configure the applications in the **Azure Portal**. Otherwise, continue with the steps for [Running the sample](#running-the-sample).
 
-> :information_source: This sample is calling a web API that is already protected by **Azure AD B2C** and hosted on **Azure App Service**. If you would like to setup and use your own web API, follow the instructions for [Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi) sample. Otherwise, continue with the steps for [Running the sample](#running-the-sample).
-
 ### Choose the Azure AD B2C tenant where you want to create your applications
 
 As a first step you'll need to:
@@ -91,7 +89,11 @@ As a first step you'll need to:
 1. Sign in to the [Azure portal](https://portal.azure.com).
 1. If your account is present in more than one **Azure AD B2C** tenant, select your profile at the top right corner in the menu on top of the page, and then **switch directory** to change your portal session to the desired **Azure AD B2C** tenant.
 
-#### Register the app (ms-identity-b2c-javascript-spa)
+### Register the service app (Node.js web API)
+
+> :information_source: This sample is calling a web API that is already protected by **Azure AD B2C** and hosted on **Azure App Service**. If you would like to setup and use your own web API, follow the instructions on [Add a web API application](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-single-page-app-webapi?tabs=app-reg-ga#add-a-web-api-application) or see [Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi) code sample.
+
+#### Register the client app (JavaScript SPA)
 
 1. Navigate to the Microsoft identity platform for developers [App registrations](https://go.microsoft.com/fwlink/?linkid=2083908) page.
 1. Select **New registration**.
@@ -111,7 +113,7 @@ Please refer to: [Tutorial: Create user flows in Azure Active Directory B2C](htt
 
 Please refer to: [Tutorial: Add identity providers to your applications in Azure Active Directory B2C](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-add-identity-providers)
 
-#### Configure the app (ms-identity-b2c-javascript-spa) to use your app registration
+#### Configure the app (JavaScript SPA) to use your app registration
 
 Open the project in your IDE (like Visual Studio Code) to configure the code.
 
@@ -130,7 +132,7 @@ Open the `App\policies.js` file. Then:
 
 Open the `App\apiConfig.js` file. Then:
 
-1. Find the key `b2cScopes` and replace the existing value with the scope of your web API (if you have followed the [Tutorial: Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi) above, this is `api://{your-web-apis-client-id}/access_as_user`).
+1. Find the key `b2cScopes` and replace the existing value with the scope of your web API (if you have followed the [Tutorial: Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi) above, this is `api://{your-web-apis-client-id}/demo.read`).
 1. Find the key `webAPI` and replace the existing value with the coordinates of your web API (if you have followed the [Tutorial: Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi) above, this is `http://localhost:5000`).
 
 ## Running the sample
