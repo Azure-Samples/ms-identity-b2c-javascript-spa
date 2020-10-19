@@ -91,7 +91,7 @@ As a first step you'll need to:
 
 ### Register the service app (Node.js web API)
 
-> :information_source: This sample is calling a web API that is already protected by **Azure AD B2C** and hosted on **Azure App Service**. If you would like to setup and use your own web API, follow the instructions on [Add a web API application](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-single-page-app-webapi?tabs=app-reg-ga#add-a-web-api-application) or see [Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi) code sample.
+> :information_source: This sample is calling a web API that is already protected by **Azure AD B2C** and hosted on **Azure App Service**. If you would like to setup and use your own web API, follow the instructions on [Add a web API application and Configure scopes](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-single-page-app-webapi?tabs=app-reg-ga#add-a-web-api-application) or see [Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi) code sample.
 
 #### Register the client app (JavaScript SPA)
 
@@ -104,6 +104,13 @@ As a first step you'll need to:
 1. Select **Register** to create the application.
 1. In the app's registration screen, find and note the **Application (client) ID**. You use this value in your app's configuration file(s) later in your code.
 1. Select **Save** to save your changes.
+1. In the app's registration screen, click on the **API Permissions** blade in the left to open the page where we add access to the APIs that your application needs.
+    - Click the **Add a permission** button and then,
+    - Ensure that the **My APIs** tab is selected.
+    - In the list of APIs, select the name of the API you've created during the **Register the service app** step.
+    - In the **Delegated permissions** section, select the **demo.read** in the list. Use the search box if necessary.
+    - Click on the **Add permissions** button at the bottom.
+    - Click on the **Grant admin consent** button at the top.
 
 ### Create User Flows
 
