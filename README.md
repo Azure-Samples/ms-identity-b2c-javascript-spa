@@ -156,7 +156,7 @@ Open the `App\apiConfig.js` file. Then:
 
 ![Screenshot](./ReadmeFiles/screenshot.png)
 
-> :thought_balloon: Consider taking a moment to [share your experience with us](https://forms.office.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR73pcsbpbxNJuZCMKN0lURpUMkFXQjk0QkZKQ0U4VFgxWTVISkpNVFBETSQlQCN0PWcu)
+> :thought_balloon: How did we do? Consider taking a moment to [share your experience with us](https://forms.office.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR73pcsbpbxNJuZCMKN0lURpUMlZNRk1CUlk4NU5YTVNNWVpBMUYwRlBGMiQlQCN0PWcu)
 
 ## Deployment
 
