@@ -5,12 +5,12 @@ languages:
 products:
   - azure-active-directory-b2c
   - microsoft-identity-platform
-name: Vanilla JavaScript Single-page Application secured with MSAL.js using the Authorization Code Flow (PKCE) on Azure AD B2C
+name: JavaScript Single-page Application secured with MSAL.js using the Authorization Code Flow (PKCE) on Azure AD B2C
 urlFragment: ms-identity-b2c-javascript-spa
 description: "This sample demonstrates a Vanilla JavaScript Single-page Application with MSAL.js using the Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C"
 ---
 
-# Vanilla JavaScript Single-page Application secured with MSAL.js using the Authorization Code Flow (PKCE) on Azure AD B2C
+# JavaScript Single-page Application secured with MSAL.js using the Authorization Code Flow (PKCE) on Azure AD B2C
 
  1. [Overview](#overview)
  1. [Scenario](#scenario)
@@ -38,6 +38,8 @@ This sample demonstrates a Vanilla JavaScript single-page application that lets 
 
 ![Overview](./ReadmeFiles/topology.png)
 
+If you like, you can take a [quick look to the application](https://azure-samples.github.io/ms-identity-b2c-javascript-spa/) before trying.
+
 ## Contents
 
 | File/folder           | Description                                |
@@ -54,7 +56,7 @@ This sample demonstrates a Vanilla JavaScript single-page application that lets 
 - A modern web browser. This sample uses **ES6** conventions and will not run on **Internet Explorer**.
 - [Visual Studio Code](https://code.visualstudio.com/download) is recommended for running and editing this sample.
 - [VS Code Azure Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack) extension is recommended for interacting with Azure through VS Code Interface.
-- An Azure Active Directory B2C (Azure AD B2C) tenant. For more information on how to get an Azure AD tenant, see: [Create an Azure Active Directory B2C tenant](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant)
+- An Azure Active Directory B2C (Azure AD B2C) tenant. For more information, see: [Create an Azure Active Directory B2C tenant](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant)
 - A user account in your Azure AD B2C tenant.
 
 ## Setup
