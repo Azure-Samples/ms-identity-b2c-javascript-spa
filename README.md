@@ -170,6 +170,8 @@ There is one single-page application in this sample. To deploy it to **Azure Sto
 - build your project and upload it
 - update config files with website coordinates
 
+If you are going to call a web API from a your deployed SPA, you'll also need to configure your web API's **CORS** setting accordingly (more on this below). 
+
 > :information_source: If you would like to use **VS Code Azure Tools** extension for deployment, [watch the tutorial](https://docs.microsoft.com/azure/developer/javascript/tutorial-vscode-static-website-node-01) offered by Microsoft Docs.
 
 #### Build and upload the `ms-identity-b2c-javascript-spa` to an Azure Storage blob
@@ -198,6 +200,12 @@ Build your project to get a distributable files folder, where your built `html`,
 1. In the left-hand navigation pane, select the **Azure AD B2C** service, and then select **App registrations**.
 1. In the resulting screen, select the `ms-identity-b2c-javascript-spa` application.
 1. Add the same URI in the list of values of the *Authentication -> Redirect URIs* menu. If you have multiple redirect URIs, make sure that there's a new entry using the **Azure Storage**'s static website endpoint URI for each redirect URI.
+
+### CORS configuration for web API to allow calls from this SPA
+
+Now you need to navigate to the Azure App Service Portal, and locate your web API there. Once you do, click on the **CORS** blade. There, add your deployed SPA's coordinates as an allowed domain:
+
+![Screenshot](./ReadmeFiles/enable_cors.png)
 
 ## More information
 
