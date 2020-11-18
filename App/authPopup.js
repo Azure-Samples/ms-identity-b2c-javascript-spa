@@ -14,7 +14,7 @@ function selectAccount () {
 
     const currentAccounts = myMSALObj.getAllAccounts();
 
-    if (!currentAccounts  || currentAccounts.length < 1) {
+    if (!currentAccounts || currentAccounts.length < 1) {
         return;
     } else if (currentAccounts.length > 1) {
         // Add your account choosing logic here

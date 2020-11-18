@@ -1,13 +1,10 @@
-## [project-title] Changelog
+# CHANGELOG
 
-<a name="x.y.z"></a>
-# x.y.z (yyyy-mm-dd)
+## 11/18/20
 
-*Features*
-* ...
+* Update MSAL.js to 2.6.1 and resolve silent token acquisition issue.
+* Added section on CORS configuration in README.md
 
-*Bug Fixes*
-* ...
+## 10/15/20
 
-*Breaking Changes*
-* ...
+* Initial sample.
