@@ -96,6 +96,13 @@ function getTokenPopup(request) {
     request.account = myMSALObj.getAccountByHomeId(accountId);
     
     return myMSALObj.acquireTokenSilent(request)
+        .then((response) => {
+            console.log(response);
+            if (!response.accessToken || response.accessToken === "") {
+                throw new msal.InteractionRequiredAuthError;
+            }
+            return response;
+        })
         .catch(error => {
             console.warn(error);
             console.warn("silent token acquisition fails. acquiring token using popup");
@@ -117,6 +124,7 @@ function getTokenPopup(request) {
 function passTokenToApi() {
     getTokenPopup(tokenRequest)
         .then(response => {
+            console.log(response);
             if (response) {
                 console.log("access_token acquired at: " + new Date().toString());
                 try {

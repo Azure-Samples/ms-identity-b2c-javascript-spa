@@ -4,6 +4,7 @@ const myMSALObj = new msal.PublicClientApplication(msalConfig);
 
 let accountId = "";
 let username = "";
+let accessToken = null;
 
 myMSALObj.handleRedirectPromise()
     .then(handleResponse)
@@ -50,7 +51,7 @@ function handleResponse(response) {
      */
 
     if (response !== null) {
-        
+
         /**
          * We need to reject id tokens that were not issued with the default sign-in policy.
          * "acr" claim in the token tells us what policy is used (NOTE: for new policies (v2.0), use "tfp" instead of "acr").
@@ -75,7 +76,7 @@ function handleResponse(response) {
             }
     
         } else {
-            welcomeUser(username);
+            selectAccount();
         }
     } else {  
         selectAccount();
@@ -113,26 +114,39 @@ function getTokenRedirect(request) {
     * See here for more info on account retrieval: 
     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
     */
-
-   request.account = myMSALObj.getAccountByHomeId(accountId);
+    request.account = myMSALObj.getAccountByHomeId(accountId); 
    
-   return myMSALObj.acquireTokenSilent(request)
-       .catch(error => {
-           console.warn(error);
-           console.warn("silent token acquisition fails. acquiring token using popup");
-           if (error instanceof msal.InteractionRequiredAuthError) {
-               // fallback to interaction when silent call fails
-               return myMSALObj.acquireTokenRedirect(request);
-           } else {
-               console.warn(error);   
-           }
-   });
+    return myMSALObj.acquireTokenSilent(request)
+        .then((response) => {
+            if (!response.accessToken || response.accessToken === "") {
+                    throw new msal.InteractionRequiredAuthError;
+            } else {
+                accessToken = response.accessToken;
+                
+                try {
+                    callApi(apiConfig.webApi, accessToken);
+                } catch(error) {
+                    console.warn(error); 
+                }
+            }
+        })
+        .catch(error => {
+            console.warn(error);
+            console.warn("silent token acquisition fails. acquiring token using popup");
+            if (error instanceof msal.InteractionRequiredAuthError) {
+                // fallback to interaction when silent call fails
+                return myMSALObj.acquireTokenRedirect(request);
+            } else {
+                console.warn(error);   
+            }
+    });
 }
  
 // Acquires and access token and then passes it to the API call
 function passTokenToApi() {
-   getTokenRedirect(tokenRequest);
-   if (accessToken) {
+    if (!accessToken) {
+        getTokenRedirect(tokenRequest);
+    } else {
         try {
             callApi(apiConfig.webApi, accessToken);
         } catch(error) {
