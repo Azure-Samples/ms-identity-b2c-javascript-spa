@@ -26,7 +26,7 @@ const msalConfig = {
  * https://docs.microsoft.com/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
 const loginRequest = {
-  scopes: [...apiConfig.b2cScopes],
+  scopes: ["openid", ...apiConfig.b2cScopes],
 };
 
 /**
