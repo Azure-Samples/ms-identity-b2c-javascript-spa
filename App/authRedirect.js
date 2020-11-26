@@ -9,7 +9,7 @@ let accessToken = null;
 myMSALObj.handleRedirectPromise()
     .then(handleResponse)
     .catch(error => {
-        console.error(error);
+        console.log(error);
 
         // Check for forgot password error
         // Learn more about AAD error codes at https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-aadsts-error-codes
@@ -22,7 +22,7 @@ myMSALObj.handleRedirectPromise()
         }
     });
 
-function selectAccount () {
+function selectAccount() {
 
     /**
      * See here for more information on account retrieval: 
@@ -35,7 +35,7 @@ function selectAccount () {
         return;
     } else if (currentAccounts.length > 1) {
         // Add your account choosing logic here
-        console.warn("Multiple accounts detected.");
+        console.log("Multiple accounts detected.");
     } else if (currentAccounts.length === 1) {
         accountId = currentAccounts[0].homeAccountId;
         username = currentAccounts[0].username;
@@ -43,42 +43,25 @@ function selectAccount () {
     }
 }
 
+// in case of page refresh
+selectAccount();
+
 function handleResponse(response) {
-    console.log(response);
     /**
      * To see the full list of response object properties, visit:
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/request-response-object.md#response
      */
 
-    if (response !== null) {
+    if (response) {
 
-        /**
-         * We need to reject id tokens that were not issued with the default sign-in policy.
-         * "acr" claim in the token tells us what policy is used (NOTE: for new policies (v2.0), use "tfp" instead of "acr").
-         * To learn more about B2C tokens, visit https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview
-         */
-
-        if (response.idTokenClaims['acr'] === b2cPolicies.names.forgotPassword) {
-            window.alert("Password has been reset successfully. \nPlease sign-in with your new password.");
-
-            // Choose which account to logout from by passing a username.
-            const logoutRequest = {
-                account: myMSALObj.getAccountByHomeId(accountId)
-            };
-
-            myMSALObj.logout(logoutRequest);
-    
-        } else if (response.idTokenClaims['acr'] === b2cPolicies.names.editProfile) {
-            window.alert("Profile has been updated successfully.");
-    
-            if (myMSALObj.getAllAccounts()) {
-                welcomeUser(username);
-            }
-    
-        } else {
-            selectAccount();
+        // if response contains an access token, store it
+        if (response.accessToken && response.accessToken !== "") {
+            accessToken = response.accessToken;
         }
-    } else {  
+        
+        // for handling B2C user-flows and policies
+        handlePolicyChange(response);
+
         selectAccount();
     }
 }
@@ -100,7 +83,7 @@ function signOut() {
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/request-response-object.md#request
      */
 
-    // Choose which account to logout from by passing a username.
+    // Choose which account to logout from by passing a homeAccountId.
     const logoutRequest = {
         account: myMSALObj.getAccountByHomeId(accountId)
     };
@@ -114,30 +97,26 @@ function getTokenRedirect(request) {
     * See here for more info on account retrieval: 
     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
     */
+
     request.account = myMSALObj.getAccountByHomeId(accountId); 
    
     return myMSALObj.acquireTokenSilent(request)
         .then((response) => {
+            // In case the response from B2C server has an empty accessToken field
+            // throw an error to initiate token acquisition
             if (!response.accessToken || response.accessToken === "") {
                     throw new msal.InteractionRequiredAuthError;
-            } else {
-                accessToken = response.accessToken;
-                
-                try {
-                    callApi(apiConfig.webApi, accessToken);
-                } catch(error) {
-                    console.warn(error); 
-                }
-            }
+            } 
+            return handleResponse(response);
         })
         .catch(error => {
-            console.warn(error);
-            console.warn("silent token acquisition fails. acquiring token using popup");
+            console.log(error);
+            console.log("silent token acquisition fails. acquiring token using popup");
             if (error instanceof msal.InteractionRequiredAuthError) {
                 // fallback to interaction when silent call fails
                 return myMSALObj.acquireTokenRedirect(request);
             } else {
-                console.warn(error);   
+                console.log(error);   
             }
     });
 }
@@ -150,11 +129,27 @@ function passTokenToApi() {
         try {
             callApi(apiConfig.webApi, accessToken);
         } catch(error) {
-            console.warn(error); 
+            console.log(error); 
         }
     }
 }
 
 function editProfile() {
     myMSALObj.loginRedirect(b2cPolicies.authorities.editProfile);
+}
+
+function handlePolicyChange(response) {
+    /**
+     * We need to reject id tokens that were not issued with the default sign-in policy.
+     * "acr" claim in the token tells us what policy is used (NOTE: for new policies (v2.0), use "tfp" instead of "acr").
+     * To learn more about B2C tokens, visit https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview
+     */
+
+    if (response.idTokenClaims['acr'] === b2cPolicies.names.editProfile) {
+        window.alert("Profile has been updated successfully. \nPlease sign-in again.");
+        myMSALObj.logout();
+    } else if (response.idTokenClaims['acr'] === b2cPolicies.names.forgotPassword) {
+        window.alert("Password has been reset successfully. \nPlease sign-in with your new password.");
+        myMSALObj.logout();
+    }
 }
