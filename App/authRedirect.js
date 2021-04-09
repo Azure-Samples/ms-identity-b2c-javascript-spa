@@ -10,16 +10,6 @@ myMSALObj.handleRedirectPromise()
     .then(handleResponse)
     .catch(error => {
         console.log(error);
-
-        // Check for forgot password error
-        // Learn more about AAD error codes at https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-aadsts-error-codes
-        if (error.errorMessage.indexOf("AADB2C90118") > -1) {
-            try {
-                myMSALObj.loginRedirect(b2cPolicies.authorities.forgotPassword);
-            } catch(err) {
-                console.log(err);
-            }
-        }
     });
 
 function selectAccount() {
@@ -31,7 +21,7 @@ function selectAccount() {
 
     const currentAccounts = myMSALObj.getAllAccounts();
 
-    if (currentAccounts.length === 0) {
+    if (!currentAccounts || currentAccounts.length < 1) {
         return;
     } else if (currentAccounts.length > 1) {
         // Add your account choosing logic here
@@ -85,10 +75,11 @@ function signOut() {
 
     // Choose which account to logout from by passing a homeAccountId.
     const logoutRequest = {
-        account: myMSALObj.getAccountByHomeId(accountId)
+        account: myMSALObj.getAccountByHomeId(accountId),
+        postLogoutRedirectUri: msalConfig.auth.redirectUri,
     };
 
-    myMSALObj.logout(logoutRequest);
+    myMSALObj.logoutRedirect(logoutRequest);
 }
 
 function getTokenRedirect(request) {
@@ -110,8 +101,7 @@ function getTokenRedirect(request) {
             return handleResponse(response);
         })
         .catch(error => {
-            console.log(error);
-            console.log("silent token acquisition fails. acquiring token using popup");
+            console.log("Silent token acquisition fails. Acquiring token using popup. \n", error);
             if (error instanceof msal.InteractionRequiredAuthError) {
                 // fallback to interaction when silent call fails
                 return myMSALObj.acquireTokenRedirect(request);
@@ -141,15 +131,11 @@ function editProfile() {
 function handlePolicyChange(response) {
     /**
      * We need to reject id tokens that were not issued with the default sign-in policy.
-     * "acr" claim in the token tells us what policy is used (NOTE: for new policies (v2.0), use "tfp" instead of "acr").
+     * "tfp" claim in the token tells us what policy is used (NOTE: legacy policies may use "acr" instead of "tfp").
      * To learn more about B2C tokens, visit https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview
      */
-
-    if (response.idTokenClaims['acr'] === b2cPolicies.names.editProfile) {
+    if (response.idTokenClaims['tfp'] === b2cPolicies.names.editProfile) {
         window.alert("Profile has been updated successfully. \nPlease sign-in again.");
-        myMSALObj.logout();
-    } else if (response.idTokenClaims['acr'] === b2cPolicies.names.forgotPassword) {
-        window.alert("Password has been reset successfully. \nPlease sign-in with your new password.");
         myMSALObj.logout();
     }
 }

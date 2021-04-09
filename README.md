@@ -5,9 +5,9 @@ languages:
 products:
   - azure-active-directory-b2c
   - microsoft-identity-platform
-name: JavaScript Single-page Application secured with MSAL.js using the Authorization Code Flow (PKCE) on Azure AD B2C
+name: JavaScript single-page application secured with MSAL.js using the Authorization Code Flow (w/ PKCE) on Azure AD B2C
 urlFragment: ms-identity-b2c-javascript-spa
-description: "This sample demonstrates a Vanilla JavaScript Single-page Application with MSAL.js using the Authorization Code Flow (w/ PKCE) to authorize users to call a Web API protected by Azure Active Directory B2C"
+description: "This sample demonstrates a vanilla JavaScript single-page application with MSAL.js using the Authorization Code Flow (w/ PKCE) to authorize users to call a web API protected by Azure AD B2C"
 ---
 
 # JavaScript Single-page Application secured with MSAL.js using the Authorization Code Flow (PKCE) on Azure AD B2C
@@ -28,7 +28,7 @@ description: "This sample demonstrates a Vanilla JavaScript Single-page Applicat
 
 ## Overview
 
-This sample demonstrates a Vanilla JavaScript single-page application that lets users authenticate against [Azure Active Directory B2C](https://azure.microsoft.com/services/active-directory/external-identities/b2c/) (Azure AD B2C) using the [Microsoft Authentication Library for JavaScript](https://github.com/AzureAD/microsoft-authentication-library-for-js) (MSAL.js) and authorize them to call a web API that is also protected by **Azure AD B2C**.
+This sample demonstrates a vanilla JavaScript single-page application (SPA) that lets users authenticate against [Azure Active Directory B2C](https://azure.microsoft.com/services/active-directory/external-identities/b2c/) (Azure AD B2C) using the [Microsoft Authentication Library for JavaScript](https://github.com/AzureAD/microsoft-authentication-library-for-js) (MSAL.js) and authorize them to call a web API that is also protected by **Azure AD B2C**.
 
 ## Scenario
 
@@ -38,7 +38,7 @@ This sample demonstrates a Vanilla JavaScript single-page application that lets 
 
 ![Overview](./ReadmeFiles/topology.png)
 
-If you like, you can take a [quick look to the application](https://azure-samples.github.io/ms-identity-b2c-javascript-spa/) before trying.
+If you like, you can take a [quick look at the application](https://azure-samples.github.io/ms-identity-b2c-javascript-spa/) before trying.
 
 ## Contents
 
@@ -53,9 +53,9 @@ If you like, you can take a [quick look to the application](https://azure-sample
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/en/download/) must be installed to run this sample.
-- A modern web browser. This sample uses **ES6** conventions and will not run on **Internet Explorer**.
 - [Visual Studio Code](https://code.visualstudio.com/download) is recommended for running and editing this sample.
 - [VS Code Azure Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack) extension is recommended for interacting with Azure through VS Code Interface.
+- A modern web browser. This sample uses **ES6** conventions and will not run on **Internet Explorer**.
 - An Azure Active Directory B2C (Azure AD B2C) tenant. For more information, see: [Create an Azure Active Directory B2C tenant](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant)
 - A user account in your Azure AD B2C tenant.
 
@@ -135,7 +135,7 @@ Open the `App\authConfig.js` file. Then:
 
 Open the `App\policies.js` file. Then:
 
-1. Find the key `policies.names` and replace it with the names (IDs) of your policies/user-flows e.g. `b2c_1_susi`.
+1. Find the key `policies.names` and replace it with the names (IDs) of your policies/user-flows e.g. `b2c_1_susi_reset_v2`.
 1. Find the key `policies.authorities` abd replace it with the authority strings of your policies/user-flows e.g. `https://fabrikamb2c.b2clogin.com/fabrikamb2c.onmicrosoft.com/b2c_1_susi`.
 1. Find the key `policies.authorityDomain` abd replace it with the domain of your authority e.g. `fabrikamb2c.b2clogin.com`.
 
@@ -170,7 +170,7 @@ There is one single-page application in this sample. To deploy it to **Azure Sto
 - build your project and upload it
 - update config files with website coordinates
 
-If you are going to call a web API from a your deployed SPA, you'll also need to configure your web API's **CORS** setting accordingly (more on this below). 
+If you are going to call a web API from a your deployed SPA, you'll also need to configure your web API's **CORS** setting accordingly (more on this below).
 
 > :information_source: If you would like to use **VS Code Azure Tools** extension for deployment, [watch the tutorial](https://docs.microsoft.com/azure/developer/javascript/tutorial-vscode-static-website-node-01) offered by Microsoft Docs.
 

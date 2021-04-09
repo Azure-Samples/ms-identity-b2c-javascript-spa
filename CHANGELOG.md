@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 04/09/2021
+
+* Updated MSAL.js to 2.13.1
+* Added combined SUSI user flow with password reset feature.
+* Added logoutPopup and logoutRedirect APIs.
+
 ## 11/23/2020
 
 * Updated MSAL.js to 2.7.0
