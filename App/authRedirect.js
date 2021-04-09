@@ -7,7 +7,18 @@ let username = "";
 let accessToken = null;
 
 myMSALObj.handleRedirectPromise()
-    .then(handleResponse)
+    .then(response => {
+        if (response) {
+            /**
+             * We need to reject id tokens that were not issued with the default sign-in policy.
+             * "tfp" claim in the token tells us what policy is used (NOTE: legacy policies may use "acr" instead of "tfp").
+             * To learn more about B2C tokens, visit https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview
+             */
+            if (response.idTokenClaims['tfp'].toUpperCase() === b2cPolicies.names.signUpSignIn.toUpperCase()) {
+                handleResponse(response);
+            }
+        }
+    })
     .catch(error => {
         console.log(error);
     });
@@ -23,9 +34,19 @@ function selectAccount() {
 
     if (!currentAccounts || currentAccounts.length < 1) {
         return;
-    } else if (currentAccounts.length > 1) {
-        // Add your account choosing logic here
-        console.log("Multiple accounts detected.");
+    } else if (currentAccounts.length === Object.entries(b2cPolicies.names).length) {
+        
+        /**
+         * Due to the way MSAL caches account objects, the auth response from initiating a user-flow
+         * is cached as a new account. Here we make sure we are selecting the account with homeAccountId
+         * that contains the sign-up/sign-in user-flow.
+         */
+        const account = currentAccounts.find(account => 
+            account.homeAccountId.toUpperCase().includes(b2cPolicies.names.signUpSignIn.toUpperCase()));
+        
+        accountId = account.homeAccountId;
+        username = account.username;
+        welcomeUser(username);
     } else if (currentAccounts.length === 1) {
         accountId = currentAccounts[0].homeAccountId;
         username = currentAccounts[0].username;
@@ -36,22 +57,18 @@ function selectAccount() {
 // in case of page refresh
 selectAccount();
 
-function handleResponse(response) {
+async function handleResponse(response) {
+
     /**
      * To see the full list of response object properties, visit:
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/request-response-object.md#response
      */
 
-    if (response) {
-
-        // if response contains an access token, store it
-        if (response.accessToken && response.accessToken !== "") {
-            accessToken = response.accessToken;
-        }
-        
-        // for handling B2C user-flows and policies
-        handlePolicyChange(response);
-
+    if (response !== null) {
+        accountId = response.account.homeAccountId;
+        username = response.account.username;
+        welcomeUser(username);
+    } else {
         selectAccount();
     }
 }
@@ -73,9 +90,7 @@ function signOut() {
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/request-response-object.md#request
      */
 
-    // Choose which account to logout from by passing a homeAccountId.
     const logoutRequest = {
-        account: myMSALObj.getAccountByHomeId(accountId),
         postLogoutRedirectUri: msalConfig.auth.redirectUri,
     };
 
@@ -96,11 +111,13 @@ function getTokenRedirect(request) {
             // In case the response from B2C server has an empty accessToken field
             // throw an error to initiate token acquisition
             if (!response.accessToken || response.accessToken === "") {
-                    throw new msal.InteractionRequiredAuthError;
-            } 
-            return handleResponse(response);
-        })
-        .catch(error => {
+                throw new msal.InteractionRequiredAuthError;
+            } else {
+                console.log("access_token acquired at: " + new Date().toString());
+                accessToken = response.accessToken;
+                passTokenToApi();
+            }
+        }).catch(error => {
             console.log("Silent token acquisition fails. Acquiring token using popup. \n", error);
             if (error instanceof msal.InteractionRequiredAuthError) {
                 // fallback to interaction when silent call fails
@@ -124,18 +141,11 @@ function passTokenToApi() {
     }
 }
 
+/**
+ * To initiate a B2C user-flow, simply make a login request using
+ * the full authority string of that user-flow e.g.
+ * https://fabrikamb2c.b2clogin.com/fabrikamb2c.onmicrosoft.com/B2C_1_edit_profile_v2 
+ */
 function editProfile() {
     myMSALObj.loginRedirect(b2cPolicies.authorities.editProfile);
-}
-
-function handlePolicyChange(response) {
-    /**
-     * We need to reject id tokens that were not issued with the default sign-in policy.
-     * "tfp" claim in the token tells us what policy is used (NOTE: legacy policies may use "acr" instead of "tfp").
-     * To learn more about B2C tokens, visit https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview
-     */
-    if (response.idTokenClaims['tfp'] === b2cPolicies.names.editProfile) {
-        window.alert("Profile has been updated successfully. \nPlease sign-in again.");
-        myMSALObj.logout();
-    }
 }
