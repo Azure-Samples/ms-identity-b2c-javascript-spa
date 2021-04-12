@@ -77,7 +77,7 @@ function signOut() {
 
     const logoutRequest = {
         postLogoutRedirectUri: msalConfig.auth.redirectUri,
-        redirectMainWindowTo: msalConfig.auth.redirectUri
+        mainWindowRedirectUri: msalConfig.auth.redirectUri
     };
     
     myMSALObj.logoutPopup(logoutRequest).then(() => {
