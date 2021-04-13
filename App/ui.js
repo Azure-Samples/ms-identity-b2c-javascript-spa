@@ -11,13 +11,15 @@ const response = document.getElementById("response");
 const label = document.getElementById('label');
 
 function welcomeUser(username) {
+    welcomeDiv.innerHTML = `Welcome ${username}!`
+
     label.classList.add('d-none');
     signInButton.classList.add('d-none');
-    signOutButton.classList.remove('d-none');
     titleDiv.classList.add('d-none');
+
+    signOutButton.classList.remove('d-none');
     editProfileButton.classList.remove('d-none');
     welcomeDiv.classList.remove('d-none');
-    welcomeDiv.innerHTML = `Welcome ${username}!`
     callApiButton.classList.remove('d-none');
 }
 

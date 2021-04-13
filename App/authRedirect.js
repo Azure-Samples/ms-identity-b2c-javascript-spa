@@ -11,7 +11,7 @@ myMSALObj.handleRedirectPromise()
         if (response) {
             /**
              * We need to reject id tokens that were not issued with the default sign-in policy.
-             * "tfp" claim in the token tells us what policy is used (NOTE: legacy policies may use "acr" instead of "tfp").
+             * "tfp" claim in the token tells us which policy is used (NOTE: legacy policies may use "acr" instead of "tfp").
              * To learn more about B2C tokens, visit https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview
              */
             if (response.idTokenClaims['tfp'].toUpperCase() === b2cPolicies.names.signUpSignIn.toUpperCase()) {
@@ -32,21 +32,35 @@ function selectAccount() {
 
     const currentAccounts = myMSALObj.getAllAccounts();
 
-    if (!currentAccounts || currentAccounts.length < 1) {
+    if (currentAccounts.length < 1) {
         return;
     } else if (currentAccounts.length === Object.entries(b2cPolicies.names).length) {
-        
+       
         /**
          * Due to the way MSAL caches account objects, the auth response from initiating a user-flow
          * is cached as a new account. Here we make sure we are selecting the account with homeAccountId
-         * that contains the sign-up/sign-in user-flow.
+         * that contains the sign-up/sign-in user-flow, as this is the default flow we initially signed-in with.
          */
-        const account = currentAccounts.find(account => 
-            account.homeAccountId.toUpperCase().includes(b2cPolicies.names.signUpSignIn.toUpperCase()));
-        
-        accountId = account.homeAccountId;
-        username = account.username;
-        welcomeUser(username);
+         const accounts = currentAccounts.filter(account =>
+            account.homeAccountId.toUpperCase().includes(b2cPolicies.names.signUpSignIn.toUpperCase())
+            &&
+            account.homeAccountId.includes(account.localAccountId)
+        );
+
+        if (accounts.length > 1) {
+            if (accounts.every(account => account.localAccountId === accounts[0].localAccountId)) {
+                accountId = accounts[0].homeAccountId;
+                username = accounts[0].username;
+                welcomeUser(username);
+            } else {
+                signOut();
+            };
+        } else if (accounts.length === 1) {
+            accountId = accounts[0].homeAccountId;
+            username = accounts[0].username;
+            welcomeUser(username);
+        }
+
     } else if (currentAccounts.length === 1) {
         accountId = currentAccounts[0].homeAccountId;
         username = currentAccounts[0].username;
@@ -103,9 +117,11 @@ function getTokenRedirect(request) {
     * See here for more info on account retrieval: 
     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
     */
-
     request.account = myMSALObj.getAccountByHomeId(accountId); 
    
+    /**
+     * 
+     */
     return myMSALObj.acquireTokenSilent(request)
         .then((response) => {
             // In case the response from B2C server has an empty accessToken field

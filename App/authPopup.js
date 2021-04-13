@@ -5,7 +5,13 @@ const myMSALObj = new msal.PublicClientApplication(msalConfig);
 let accountId = "";
 let username = "";
 
-function selectAccount () {
+function selectAccount() {
+
+    // Ah, nice idea! If you want to go this route I would also recommend checking clientId and 
+    // authority match and then also that there aren't more than 1 user signed into this authority/policy.
+
+    // Another way to do this would be to track the homeAccountId after retrieving tokens and use the getAccountByHomeId API 
+    // or use the setActiveAccount/getActiveAccount APIs.
 
     /**
      * See here for more info on account retrieval: 
@@ -14,21 +20,35 @@ function selectAccount () {
 
     const currentAccounts = myMSALObj.getAllAccounts();
 
-    if (!currentAccounts || currentAccounts.length < 1) {
+    if (currentAccounts.length < 1) {
         return;
     } else if (currentAccounts.length === Object.entries(b2cPolicies.names).length) {
-        
+
         /**
          * Due to the way MSAL caches account objects, the auth response from initiating a user-flow
          * is cached as a new account. Here we make sure we are selecting the account with homeAccountId
-         * that contains the sign-up/sign-in user-flow.
+         * that contains the sign-up/sign-in user-flow, as this is the default flow we initially signed-in with.
          */
-        const account = currentAccounts.find(account => 
-            account.homeAccountId.toUpperCase().includes(b2cPolicies.names.signUpSignIn.toUpperCase()));
-        
-        accountId = account.homeAccountId;
-        username = account.username;
-        welcomeUser(username);
+        const accounts = currentAccounts.filter(account =>
+            account.homeAccountId.toUpperCase().includes(b2cPolicies.names.signUpSignIn.toUpperCase())
+            &&
+            account.homeAccountId.includes(account.localAccountId)
+        );
+
+        if (accounts.length > 1) {
+            if (accounts.every(account => account.localAccountId === accounts[0].localAccountId)) {
+                accountId = accounts[0].homeAccountId;
+                username = accounts[0].username;
+                welcomeUser(username);
+            } else {
+                signOut();
+            };
+        } else if (accounts.length === 1) {
+            accountId = accounts[0].homeAccountId;
+            username = accounts[0].username;
+            welcomeUser(username);
+        }
+
     } else if (currentAccounts.length === 1) {
         accountId = currentAccounts[0].homeAccountId;
         username = currentAccounts[0].username;
@@ -79,21 +99,22 @@ function signOut() {
         postLogoutRedirectUri: msalConfig.auth.redirectUri,
         mainWindowRedirectUri: msalConfig.auth.redirectUri
     };
-    
-    myMSALObj.logoutPopup(logoutRequest).then(() => {
-        window.location.reload();
-    });
+
+    myMSALObj.logoutPopup(logoutRequest);
 }
 
 function getTokenPopup(request) {
 
-     /**
-     * See here for more information on account retrieval: 
-     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
-     */
-
+    /**
+    * See here for more information on account retrieval: 
+    * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
+    */
     request.account = myMSALObj.getAccountByHomeId(accountId);
-    
+
+
+    /**
+     * 
+     */
     return myMSALObj.acquireTokenSilent(request)
         .then((response) => {
             // In case the response from B2C server has an empty accessToken field
@@ -114,12 +135,17 @@ function getTokenPopup(request) {
                     }).catch(error => {
                         console.log(error);
                     });
-            } else {
-                console.log(error);   
+            
+            if (error instanceof msal.BrowserAuthError) {
+
             }
-    });
+
+            } else {
+                console.log(error);
+            }
+        });
 }
-  
+
 function passTokenToApi() {
     getTokenPopup(tokenRequest)
         .then(response => {
@@ -127,8 +153,8 @@ function passTokenToApi() {
                 console.log("access_token acquired at: " + new Date().toString());
                 try {
                     callApi(apiConfig.webApi, response.accessToken);
-                } catch(error) {
-                    console.log(error); 
+                } catch (error) {
+                    console.log(error);
                 }
             }
         });
