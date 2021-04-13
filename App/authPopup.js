@@ -5,24 +5,24 @@ const myMSALObj = new msal.PublicClientApplication(msalConfig);
 let accountId = "";
 let username = "";
 
+function setAccount(account) {
+    accountId = account.homeAccountId;
+    username = account.username;
+    welcomeUser(username);
+}
+
 function selectAccount() {
-
-    // Ah, nice idea! If you want to go this route I would also recommend checking clientId and 
-    // authority match and then also that there aren't more than 1 user signed into this authority/policy.
-
-    // Another way to do this would be to track the homeAccountId after retrieving tokens and use the getAccountByHomeId API 
-    // or use the setActiveAccount/getActiveAccount APIs.
-
     /**
      * See here for more info on account retrieval: 
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
      */
 
     const currentAccounts = myMSALObj.getAllAccounts();
+    console.log(currentAccounts);
 
     if (currentAccounts.length < 1) {
         return;
-    } else if (currentAccounts.length === Object.entries(b2cPolicies.names).length) {
+    } else if (currentAccounts.length > 1) {
 
         /**
          * Due to the way MSAL caches account objects, the auth response from initiating a user-flow
@@ -32,27 +32,25 @@ function selectAccount() {
         const accounts = currentAccounts.filter(account =>
             account.homeAccountId.toUpperCase().includes(b2cPolicies.names.signUpSignIn.toUpperCase())
             &&
-            account.homeAccountId.includes(account.localAccountId)
-        );
+            account.idTokenClaims.iss.toUpperCase().includes(b2cPolicies.authorityDomain.toUpperCase())
+            &&
+            account.idTokenClaims.aud === msalConfig.auth.clientId 
+            );
 
         if (accounts.length > 1) {
             if (accounts.every(account => account.localAccountId === accounts[0].localAccountId)) {
-                accountId = accounts[0].homeAccountId;
-                username = accounts[0].username;
-                welcomeUser(username);
+                // All accounts belong to the same user
+                setAccount(accounts[0]);
             } else {
+                // Multiple users detected
                 signOut();
             };
         } else if (accounts.length === 1) {
-            accountId = accounts[0].homeAccountId;
-            username = accounts[0].username;
-            welcomeUser(username);
+            setAccount(accounts[0]);
         }
 
     } else if (currentAccounts.length === 1) {
-        accountId = currentAccounts[0].homeAccountId;
-        username = currentAccounts[0].username;
-        welcomeUser(username);
+        setAccount(currentAccounts[0]);
     }
 }
 
@@ -66,9 +64,7 @@ function handleResponse(response) {
      */
 
     if (response !== null) {
-        accountId = response.account.homeAccountId;
-        username = response.account.username;
-        welcomeUser(username);
+        setAccount(response.account);
     } else {
         selectAccount();
     }
@@ -135,11 +131,6 @@ function getTokenPopup(request) {
                     }).catch(error => {
                         console.log(error);
                     });
-            
-            if (error instanceof msal.BrowserAuthError) {
-
-            }
-
             } else {
                 console.log(error);
             }

@@ -10,8 +10,8 @@ myMSALObj.handleRedirectPromise()
     .then(response => {
         if (response) {
             /**
-             * We need to reject id tokens that were not issued with the default sign-in policy.
-             * "tfp" claim in the token tells us which policy is used (NOTE: legacy policies may use "acr" instead of "tfp").
+             * We need to ignore id tokens that were not issued with the default sign-up/sign-in policy.
+             * "tfp" claim in the token tells us the policy (NOTE: legacy policies may use "acr" instead of "tfp").
              * To learn more about B2C tokens, visit https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview
              */
             if (response.idTokenClaims['tfp'].toUpperCase() === b2cPolicies.names.signUpSignIn.toUpperCase()) {
@@ -22,6 +22,13 @@ myMSALObj.handleRedirectPromise()
     .catch(error => {
         console.log(error);
     });
+
+
+function setAccount(account) {
+    accountId = account.homeAccountId;
+    username = account.username;
+    welcomeUser(username);
+}
 
 function selectAccount() {
 
@@ -34,7 +41,7 @@ function selectAccount() {
 
     if (currentAccounts.length < 1) {
         return;
-    } else if (currentAccounts.length === Object.entries(b2cPolicies.names).length) {
+    } else if (currentAccounts.length > 1) {
        
         /**
          * Due to the way MSAL caches account objects, the auth response from initiating a user-flow
@@ -44,27 +51,25 @@ function selectAccount() {
          const accounts = currentAccounts.filter(account =>
             account.homeAccountId.toUpperCase().includes(b2cPolicies.names.signUpSignIn.toUpperCase())
             &&
-            account.homeAccountId.includes(account.localAccountId)
-        );
+            account.idTokenClaims.iss.toUpperCase().includes(b2cPolicies.authorityDomain.toUpperCase())
+            &&
+            account.idTokenClaims.aud === msalConfig.auth.clientId 
+            );
 
         if (accounts.length > 1) {
             if (accounts.every(account => account.localAccountId === accounts[0].localAccountId)) {
-                accountId = accounts[0].homeAccountId;
-                username = accounts[0].username;
-                welcomeUser(username);
+                // All accounts belong to the same user
+                setAccount(accounts[0]);
             } else {
+                // Multiple users detected
                 signOut();
             };
         } else if (accounts.length === 1) {
-            accountId = accounts[0].homeAccountId;
-            username = accounts[0].username;
-            welcomeUser(username);
+            setAccount(accounts[0]);
         }
 
     } else if (currentAccounts.length === 1) {
-        accountId = currentAccounts[0].homeAccountId;
-        username = currentAccounts[0].username;
-        welcomeUser(username);
+        setAccount(currentAccounts[0]);
     }
 }
 
@@ -79,9 +84,7 @@ async function handleResponse(response) {
      */
 
     if (response !== null) {
-        accountId = response.account.homeAccountId;
-        username = response.account.username;
-        welcomeUser(username);
+        setAccount(response.account);
     } else {
         selectAccount();
     }
