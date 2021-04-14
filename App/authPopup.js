@@ -18,7 +18,6 @@ function selectAccount() {
      */
 
     const currentAccounts = myMSALObj.getAllAccounts();
-    console.log(currentAccounts);
 
     if (currentAccounts.length < 1) {
         return;
@@ -42,7 +41,7 @@ function selectAccount() {
                 // All accounts belong to the same user
                 setAccount(accounts[0]);
             } else {
-                // Multiple users detected
+                // Multiple users detected. Logout all to be on the safe side.
                 signOut();
             };
         } else if (accounts.length === 1) {

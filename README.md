@@ -10,7 +10,7 @@ urlFragment: ms-identity-b2c-javascript-spa
 description: "This sample demonstrates a vanilla JavaScript single-page application with MSAL.js using the Authorization Code Flow (w/ PKCE) to authorize users to call a web API protected by Azure AD B2C"
 ---
 
-# JavaScript Single-page Application secured with MSAL.js using the Authorization Code Flow (PKCE) on Azure AD B2C
+# JavaScript single-page application secured with MSAL.js using the Authorization Code Flow (PKCE) on Azure AD B2C
 
  1. [Overview](#overview)
  1. [Scenario](#scenario)
@@ -24,11 +24,10 @@ description: "This sample demonstrates a vanilla JavaScript single-page applicat
  1. [More information](#more-information)
  1. [Community Help and Support](#community-help-and-support)
  1. [Contributing](#contributing)
- 1. [Code of Conduct](#code-of-conduct)
 
 ## Overview
 
-This sample demonstrates a vanilla JavaScript single-page application (SPA) that lets users authenticate against [Azure Active Directory B2C](https://azure.microsoft.com/services/active-directory/external-identities/b2c/) (Azure AD B2C) using the [Microsoft Authentication Library for JavaScript](https://github.com/AzureAD/microsoft-authentication-library-for-js) (MSAL.js) and authorize them to call a web API that is also protected by **Azure AD B2C**.
+This sample demonstrates a vanilla JavaScript single-page application (SPA) that lets users authenticate against [Azure Active Directory B2C](https://azure.microsoft.com/services/active-directory/external-identities/b2c/) (Azure AD B2C) using the [Microsoft Authentication Library for JavaScript](https://github.com/AzureAD/microsoft-authentication-library-for-js) (MSAL.js) and authorize them to call a web API that is also protected by **Azure AD B2C**. This sample also demonstrates sign-up/sign-in, password reset and profile edit [user-flows](https://docs.microsoft.com/azure/active-directory-b2c/user-flow-overview).
 
 ## Scenario
 
@@ -47,7 +46,7 @@ If you like, you can take a [quick look at the application](https://azure-sample
 | `App/authPopup.js`    | Main authentication logic resides here (using popup flow). |
 | `App/authRedirect.js` | Use this instead of `authPopup.js` for authentication with redirect flow. |
 | `App/authConfig.js`   | Contains configuration parameters for the sample. |
-| `App/apiConfig.js`    | Contains Web API scopes and coordinates. |
+| `App/apiConfig.js`    | Contains web API scopes and coordinates. |
 | `App/policies.js`     | Contains B2C custom policies and user-flows.  |
 
 ## Prerequisites
@@ -56,7 +55,7 @@ If you like, you can take a [quick look at the application](https://azure-sample
 - [Visual Studio Code](https://code.visualstudio.com/download) is recommended for running and editing this sample.
 - [VS Code Azure Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack) extension is recommended for interacting with Azure through VS Code Interface.
 - A modern web browser. This sample uses **ES6** conventions and will not run on **Internet Explorer**.
-- An Azure Active Directory B2C (Azure AD B2C) tenant. For more information, see: [Create an Azure Active Directory B2C tenant](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant)
+- An Azure AD B2C tenant. For more information, see: [Create an Azure Active Directory B2C tenant](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant)
 - A user account in your Azure AD B2C tenant.
 
 ## Setup
