@@ -45,8 +45,9 @@ function selectAccount() {
        
         /**
          * Due to the way MSAL caches account objects, the auth response from initiating a user-flow
-         * is cached as a new account. Here we make sure we are selecting the account with homeAccountId
-         * that contains the sign-up/sign-in user-flow, as this is the default flow we initially signed-in with.
+         * is cached as a new account, which results in more than one account in the cache. Here we make
+         * sure we are selecting the account with homeAccountId that contains the sign-up/sign-in user-flow, 
+         * as this is the default flow the user initially signed-in with.
          */
          const accounts = currentAccounts.filter(account =>
             account.homeAccountId.toUpperCase().includes(b2cPolicies.names.signUpSignIn.toUpperCase())
@@ -57,11 +58,12 @@ function selectAccount() {
             );
 
         if (accounts.length > 1) {
+            // localAccountId identifies the entity for which the token asserts information.
             if (accounts.every(account => account.localAccountId === accounts[0].localAccountId)) {
                 // All accounts belong to the same user
                 setAccount(accounts[0]);
             } else {
-                // Multiple users detected. Logout all to be on the safe side.
+                // Multiple users detected. Logout all to be safe.
                 signOut();
             };
         } else if (accounts.length === 1) {
@@ -166,5 +168,10 @@ function passTokenToApi() {
  * https://fabrikamb2c.b2clogin.com/fabrikamb2c.onmicrosoft.com/B2C_1_edit_profile_v2 
  */
 function editProfile() {
-    myMSALObj.loginRedirect(b2cPolicies.authorities.editProfile);
+
+
+    const editProfileRequest = b2cPolicies.authorities.editProfile;
+    editProfileRequest.loginHint = myMSALObj.getAccountByHomeId(accountId).username;
+
+    myMSALObj.loginRedirect(editProfileRequest);
 }
