@@ -14,9 +14,32 @@ const msalConfig = {
       redirectUri: "http://localhost:6420", // You must register this URI on Azure Portal/App Registration. Defaults to "window.location.href".
     },
     cache: {
-      cacheLocation: "localStorage", // Configures cache location. "sessionStorage" is more secure, but "localStorage" gives you SSO.
+      cacheLocation: "sessionStorage", // Configures cache location. "sessionStorage" is more secure, but "localStorage" gives you SSO between tabs.
       storeAuthStateInCookie: false, // If you wish to store cache items in cookies as well as browser cache, set this to "true".
     },
+    system: {
+      loggerOptions: {
+        loggerCallback: (level, message, containsPii) => {
+          if (containsPii) {
+            return;
+          }
+          switch (level) {
+            case msal.LogLevel.Error:
+              console.error(message);
+              return;
+            case msal.LogLevel.Info:
+              console.info(message);
+              return;
+            case msal.LogLevel.Verbose:
+              console.debug(message);
+              return;
+            case msal.LogLevel.Warning:
+              console.warn(message);
+              return;
+          }
+        }
+      }
+    }
   };
   
 /**

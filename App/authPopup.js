@@ -5,8 +5,13 @@ const myMSALObj = new msal.PublicClientApplication(msalConfig);
 let accountId = "";
 let username = "";
 
-function selectAccount () {
+function setAccount(account) {
+    accountId = account.homeAccountId;
+    username = account.username;
+    welcomeUser(username);
+}
 
+function selectAccount() {
     /**
      * See here for more info on account retrieval: 
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
@@ -14,15 +19,39 @@ function selectAccount () {
 
     const currentAccounts = myMSALObj.getAllAccounts();
 
-    if (currentAccounts.length === 0) {
+    if (currentAccounts.length < 1) {
         return;
     } else if (currentAccounts.length > 1) {
-        // Add your account choosing logic here
-        console.log("Multiple accounts detected.");
+
+        /**
+         * Due to the way MSAL caches account objects, the auth response from initiating a user-flow
+         * is cached as a new account, which results in more than one account in the cache. Here we make
+         * sure we are selecting the account with homeAccountId that contains the sign-up/sign-in user-flow, 
+         * as this is the default flow the user initially signed-in with.
+         */
+        const accounts = currentAccounts.filter(account =>
+            account.homeAccountId.toUpperCase().includes(b2cPolicies.names.signUpSignIn.toUpperCase())
+            &&
+            account.idTokenClaims.iss.toUpperCase().includes(b2cPolicies.authorityDomain.toUpperCase())
+            &&
+            account.idTokenClaims.aud === msalConfig.auth.clientId 
+            );
+
+        if (accounts.length > 1) {
+            // localAccountId identifies the entity for which the token asserts information.
+            if (accounts.every(account => account.localAccountId === accounts[0].localAccountId)) {
+                // All accounts belong to the same user
+                setAccount(accounts[0]);
+            } else {
+                // Multiple users detected. Logout all to be safe.
+                signOut();
+            };
+        } else if (accounts.length === 1) {
+            setAccount(accounts[0]);
+        }
+
     } else if (currentAccounts.length === 1) {
-        accountId = currentAccounts[0].homeAccountId;
-        username = currentAccounts[0].username;
-        welcomeUser(username);
+        setAccount(currentAccounts[0]);
     }
 }
 
@@ -36,9 +65,7 @@ function handleResponse(response) {
      */
 
     if (response !== null) {
-        accountId = response.account.homeAccountId;
-        username = response.account.username;
-        welcomeUser(username);
+        setAccount(response.account);
     } else {
         selectAccount();
     }
@@ -55,16 +82,6 @@ function signIn() {
         .then(handleResponse)
         .catch(error => {
             console.log(error);
-                
-            // Error handling
-            if (error.errorMessage) {
-                // Check for forgot password error
-                // Learn more about AAD error codes at https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-aadsts-error-codes
-                if (error.errorMessage.indexOf("AADB2C90118") > -1) {
-                    myMSALObj.loginPopup(b2cPolicies.authorities.forgotPassword)
-                        .then(response => handlePolicyChange(response));
-                }
-            }
         });
 }
 
@@ -75,24 +92,26 @@ function signOut() {
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/request-response-object.md#request
      */
 
-    // Choose which account to logout from.
-    
     const logoutRequest = {
-        account: myMSALObj.getAccountByHomeId(accountId)
+        postLogoutRedirectUri: msalConfig.auth.redirectUri,
+        mainWindowRedirectUri: msalConfig.auth.redirectUri
     };
-    
-    myMSALObj.logout(logoutRequest);
+
+    myMSALObj.logoutPopup(logoutRequest);
 }
 
 function getTokenPopup(request) {
 
-     /**
-     * See here for more information on account retrieval: 
-     * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
-     */
-
+    /**
+    * See here for more information on account retrieval: 
+    * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
+    */
     request.account = myMSALObj.getAccountByHomeId(accountId);
-    
+
+
+    /**
+     * 
+     */
     return myMSALObj.acquireTokenSilent(request)
         .then((response) => {
             // In case the response from B2C server has an empty accessToken field
@@ -103,8 +122,7 @@ function getTokenPopup(request) {
             return response;
         })
         .catch(error => {
-            console.log(error);
-            console.log("silent token acquisition fails. acquiring token using popup");
+            console.log("Silent token acquisition fails. Acquiring token using popup. \n", error);
             if (error instanceof msal.InteractionRequiredAuthError) {
                 // fallback to interaction when silent call fails
                 return myMSALObj.acquireTokenPopup(request)
@@ -115,11 +133,11 @@ function getTokenPopup(request) {
                         console.log(error);
                     });
             } else {
-                console.log(error);   
+                console.log(error);
             }
-    });
+        });
 }
-  
+
 function passTokenToApi() {
     getTokenPopup(tokenRequest)
         .then(response => {
@@ -127,30 +145,25 @@ function passTokenToApi() {
                 console.log("access_token acquired at: " + new Date().toString());
                 try {
                     callApi(apiConfig.webApi, response.accessToken);
-                } catch(error) {
-                    console.log(error); 
+                } catch (error) {
+                    console.log(error);
                 }
             }
         });
 }
 
+/**
+ * To initiate a B2C user-flow, simply make a login request using
+ * the full authority string of that user-flow e.g.
+ * https://fabrikamb2c.b2clogin.com/fabrikamb2c.onmicrosoft.com/B2C_1_edit_profile_v2 
+ */
 function editProfile() {
-    myMSALObj.loginPopup(b2cPolicies.authorities.editProfile)
-      .then(response => handlePolicyChange(response));
-}
+    
+    const editProfileRequest = b2cPolicies.authorities.editProfile;
+    editProfileRequest.loginHint = myMSALObj.getAccountByHomeId(accountId).username;
 
-function handlePolicyChange(response) {
-    /**
-     * We need to reject id tokens that were not issued with the default sign-in policy.
-     * "acr" claim in the token tells us what policy is used (NOTE: for new policies (v2.0), use "tfp" instead of "acr").
-     * To learn more about B2C tokens, visit https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview
-     */
-
-    if (response.idTokenClaims['acr'] === b2cPolicies.names.editProfile) {
-        window.alert("Profile has been updated successfully. \nPlease sign-in again.");
-        myMSALObj.logout();
-    } else if (response.idTokenClaims['acr'] === b2cPolicies.names.forgotPassword) {
-        window.alert("Password has been reset successfully. \nPlease sign-in with your new password.");
-        myMSALObj.logout();
-    }
+    myMSALObj.loginPopup(editProfileRequest)
+        .catch(error => {
+            console.log(error);
+        });
 }

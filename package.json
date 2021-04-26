@@ -1,7 +1,7 @@
 {
   "name": "ms-identity-b2c-javascript-spa",
   "version": "1.0.0",
-  "description": "A Vanilla JavaScript Single-page Application secured with MSAL.js",
+  "description": "A Vanilla JavaScript single-page application secured with MSAL.js",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
