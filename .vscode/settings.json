@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/0d1354e7-27ca-46f3-9fc8-6e91dd3c0b03/resourceGroups/IDP-POC/providers/Microsoft.Web/sites/ms-identity-b2c-javascript-spa",
+    "appService.deploySubpath": "."
+}
