@@ -19,9 +19,13 @@ function callApi(endpoint, token) {
         if (response) {
           logMessage('Web API responded: ' + response.name);
         }
+        else {
+          logMessage('No Response value!');
+        }
         
         return response;
       }).catch(error => {
+        logMessage('Error: ' + error);
         console.error(error);
       });
   }
