@@ -17,7 +17,7 @@ function callApi(endpoint, token) {
       .then(response => {
 
         if (response) {
-          logMessage('Web API responded: ' + response.name);
+          logMessage('Web API responded: ' + response.name + " with a persona of '" + response.persona + "'");
         }
         else {
           logMessage('No Response value!');
