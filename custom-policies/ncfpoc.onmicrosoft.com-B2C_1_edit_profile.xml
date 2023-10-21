@@ -1,0 +1,350 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="ncfpoc.onmicrosoft.com" TenantObjectId="8551848d-8719-4c41-9169-035f86735bcf" PolicyId="B2C_1_edit_profile" PublicPolicyUri="http://ncfpoc.onmicrosoft.com/">
+  <BasePolicy>
+    <TenantId>ncfpoc.onmicrosoft.com</TenantId>
+    <PolicyId>base-v1</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="extension_Persona">
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction MergeBehavior="ReplaceAll">
+          <Enumeration Text="Giver" Value="giver" SelectByDefault="false" />
+          <Enumeration Text="Grantee" Value="grantee" SelectByDefault="false" />
+          <Enumeration Text="Advisor" Value="advisor" SelectByDefault="false" />
+        </Restriction>
+      </ClaimType>
+      <ClaimType Id="givenName">
+        <DisplayName>First Name</DisplayName>
+        <DataType>string</DataType>
+        <Restriction MergeBehavior="Append" />
+      </ClaimType>
+      <ClaimType Id="surname">
+        <DisplayName>Last Name</DisplayName>
+        <DataType>string</DataType>
+        <Restriction MergeBehavior="Append" />
+      </ClaimType>
+      <ClaimType Id="newPassword">
+        <DataType>string</DataType>
+        <PredicateValidationReference Id="StrongPassword" />
+      </ClaimType>
+      <ClaimType Id="reenterPassword">
+        <DataType>string</DataType>
+        <PredicateValidationReference Id="StrongPassword" />
+      </ClaimType>
+    </ClaimsSchema>
+    <ContentDefinitions>
+      <ContentDefinition Id="api.error">
+        <LoadUri>~/tenant/templates/MSA/exception.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:globalexception:1.2.5</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.blockminor">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.signin">
+        <LoadUri>~/tenant/templates/MSA/idpSelector.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:unifiedssp:2.1.14</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.phoneInput">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.expiredpassword">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.blockpage">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.profileupdate2.1">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.emailSignIn">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.idpselections.signup1.1">
+        <LoadUri>~/tenant/templates/MSA/idpSelector.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:providerselection:1.2.5</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.localaccountlookup2.1">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.localaccountpasswordchange2.1">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.emailverify">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.progressiveprofile">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.changePhoneNumberVerifyEmailAddress">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.newPhoneNumber">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.phonesuccess">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.phoneSignIn">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.phoneSignInCollectEmailAddress">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.phonefactor1.1">
+        <LoadUri>~/tenant/templates/MSA/multifactor-1.0.0.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:multifactor:1.2.12</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.totp">
+        <LoadUri>~/tenant/templates/MSA/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.26</DataUri>
+        <Metadata>
+          <Item Key="TemplateId">msa</Item>
+        </Metadata>
+      </ContentDefinition>
+    </ContentDefinitions>
+  </BuildingBlocks>
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-ReadCommon">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_Persona" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surname" />
+            <OutputClaim ClaimTypeReferenceId="country" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="AAD-WriteCommon">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="givenName" />
+            <PersistedClaim ClaimTypeReferenceId="surname" />
+            <PersistedClaim ClaimTypeReferenceId="country" />
+            <PersistedClaim ClaimTypeReferenceId="extension_Persona" />
+            <PersistedClaim ClaimTypeReferenceId="displayName" />
+          </PersistedClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Evaluate Block User For GDPR</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SetFeatureDefaultValue">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="continueOnPasswordExpiration" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="enableSelfServicePasswordReset" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="isConditionalAccessOn" DefaultValue="false" />
+            <OutputClaim ClaimTypeReferenceId="mfaEnabledV3" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="mfaEnroll" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="needToPerformMfa" DefaultValue="false" />
+            <OutputClaim ClaimTypeReferenceId="collectEmailOnSignUp" DefaultValue="false" />
+            <OutputClaim ClaimTypeReferenceId="collectEmailOnSignIn" DefaultValue="false" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Google</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Google-OAUTH">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="LocalAccountDiscoveryUsingUserNameAndValidateStrongAuthenticationEmailAddress">
+          <IncludeClaimsFromTechnicalProfile>SelfAsserted-Input-Sspr</IncludeClaimsFromTechnicalProfile>
+        </TechnicalProfile>
+        <TechnicalProfile Id="LocalAccountDiscoveryUsingEmailAddress">
+          <IncludeClaimsFromTechnicalProfile>SelfAsserted-Input-Sspr</IncludeClaimsFromTechnicalProfile>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>PhoneFactor</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="PhoneFactor-Common">
+          <Metadata>
+            <Item Key="setting.authenticationMode">sms</Item>
+          </Metadata>
+          <EnabledForUserJourneys>Always</EnabledForUserJourneys>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Self Asserted</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SelfAsserted-Input">
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="extension_Persona" />
+            <InputClaim ClaimTypeReferenceId="displayName" />
+            <InputClaim ClaimTypeReferenceId="givenName" />
+            <InputClaim ClaimTypeReferenceId="surname" />
+            <InputClaim ClaimTypeReferenceId="country" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="extension_Persona" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="displayName" />
+            <DisplayClaim ClaimTypeReferenceId="givenName" />
+            <DisplayClaim ClaimTypeReferenceId="surname" />
+            <DisplayClaim ClaimTypeReferenceId="country" />
+          </DisplayClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_Persona" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surname" />
+            <OutputClaim ClaimTypeReferenceId="country" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="SelfAsserted-Input-Sspr">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_Persona" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surname" />
+            <OutputClaim ClaimTypeReferenceId="country" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Token Issuer</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="JwtIssuer">
+          <Metadata>
+            <Item Key="token_lifetime_secs">3600</Item>
+            <Item Key="id_token_lifetime_secs">3600</Item>
+            <Item Key="refresh_token_lifetime_secs">1209600</Item>
+            <Item Key="rolling_refresh_token_lifetime_secs">7776000</Item>
+            <Item Key="IssuanceClaimPattern">AuthorityAndTenantGuid</Item>
+            <Item Key="AuthenticationContextReferenceClaimPattern">None</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+  <SubJourneys>
+    <SubJourney Id="IdentityProviderSelection_SignIn" Type="Call">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="GoogleExchange" />
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="ForgotPassword" />
+          </ClaimsProviderSelections>
+        </OrchestrationStep>
+      </OrchestrationSteps>
+    </SubJourney>
+    <SubJourney Id="IdentityProviderSelection_LocalAccountDiscovery" Type="Call">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsProviderSelection">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="PasswordResetUsingEmailAddressExchange" />
+          </ClaimsProviderSelections>
+        </OrchestrationStep>
+      </OrchestrationSteps>
+    </SubJourney>
+  </SubJourneys>
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="B2CUserProfileUpdate_V3" />
+    <UserJourneyBehaviors>
+      <SessionExpiryType>Rolling</SessionExpiryType>
+      <SessionExpiryInSeconds>86400</SessionExpiryInSeconds>
+    </UserJourneyBehaviors>
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="emails" />
+        <OutputClaim ClaimTypeReferenceId="identityProvider" />
+        <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" />
+        <OutputClaim ClaimTypeReferenceId="objectId" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+        <OutputClaim ClaimTypeReferenceId="extension_Persona" />
+        <OutputClaim ClaimTypeReferenceId="trustFrameworkPolicy" Required="true" DefaultValue="{policy}" />
+        <OutputClaim ClaimTypeReferenceId="isForgotPassword" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

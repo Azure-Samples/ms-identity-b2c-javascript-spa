@@ -5,19 +5,19 @@
  */
 const b2cPolicies = {
     names: {
-        signUpSignIn: "B2C_1_susi",
-        editProfile: "B2C_1_edit_profile",
-        resetPassword: "B2C_1_reset_password"
+        signUpSignIn: "B2C_1A_SIGNUP_SIGNIN",
+        editProfile: "B2C_1A_PROFILEEDIT",
+        resetPassword: "B2C_1A_PASSWORDRESET"
     },
     authorities: {
         signUpSignIn: {
-            authority: "https://ncfpoc.b2clogin.com/ncfpoc.onmicrosoft.com/B2C_1_susi",
+            authority: "https://ncfpoc.b2clogin.com/ncfpoc.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN",
         },
         editProfile: {
-            authority: "https://ncfpoc.b2clogin.com/ncfpoc.onmicrosoft.com/B2C_1_edit_profile"
+            authority: "https://ncfpoc.b2clogin.com/ncfpoc.onmicrosoft.com/B2C_1A_PROFILEEDIT"
         },
         resetPassword: {
-            authority: "https://ncfpoc.b2clogin.com/ncfpoc.onmicrosoft.com/B2C_1_reset_password"
+            authority: "https://ncfpoc.b2clogin.com/ncfpoc.onmicrosoft.com/B2C_1A_PASSWORDRESET"
         }
     },
     authorityDomain: "ncfpoc.b2clogin.com"
