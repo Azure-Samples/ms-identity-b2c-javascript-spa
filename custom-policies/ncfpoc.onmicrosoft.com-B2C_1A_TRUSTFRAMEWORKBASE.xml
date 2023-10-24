@@ -278,8 +278,17 @@
           <Protocol Name="OpenIdConnect" PartnerClaimType="tfp" />
         </DefaultPartnerClaimTypes>
       </ClaimType>
+      <ClaimType Id="extension_Persona">
+        <DataType>string</DataType>
+        <UserInputType>CheckboxMultiSelect</UserInputType>
+        <Restriction MergeBehavior="ReplaceAll">
+          <Enumeration Text="Giver" Value="giver" SelectByDefault="false" />
+          <Enumeration Text="Grantee" Value="grantee" SelectByDefault="false" />
+          <Enumeration Text="Advisor" Value="advisor" SelectByDefault="false" />
+        </Restriction>
+      </ClaimType>
       <ClaimType Id="givenName">
-        <DisplayName>Given Name</DisplayName>
+        <DisplayName>Fiven Name</DisplayName>
         <DataType>string</DataType>
         <DefaultPartnerClaimTypes>
           <Protocol Name="OAuth2" PartnerClaimType="given_name" />
@@ -290,7 +299,7 @@
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="surname">
-        <DisplayName>Surname</DisplayName>
+        <DisplayName>Last Name</DisplayName>
         <DataType>string</DataType>
         <DefaultPartnerClaimTypes>
           <Protocol Name="OAuth2" PartnerClaimType="family_name" />
@@ -879,6 +888,7 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
             <OutputClaim ClaimTypeReferenceId="password" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="extension_Persona" />
             <OutputClaim ClaimTypeReferenceId="objectId" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
           </OutputClaims>
