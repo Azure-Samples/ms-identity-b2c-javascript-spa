@@ -61,12 +61,12 @@
           <LocalizedString ElementType="UxElement" StringId="requiredField_password">Please enter your password</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="requiredField_generic">Please enter your {0}</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="invalid_generic">Please enter a valid {0}</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="createaccount_one_link">Sign up now</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="createaccount_one_link">Open one now</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="createaccount_two_links">Sign up with {0} or {1}</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="createaccount_three_links">Sign up with {0}, {1}, or {2}</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="forgotpassword_link">Forgot your password?</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="button_signin">Sign in</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="createaccount_intro">Don't have an account?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="createaccount_intro">Don't have a Giving Fund?</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="unknown_error">We are having trouble signing you in. Please try again later.</LocalizedString>
           <!-- Uncomment the remember_me only if the keep me signed in is activated. 
           <LocalizedString ElementType="UxElement" StringId="remember_me">Keep me signed in</LocalizedString> -->
