@@ -5,13 +5,13 @@
  */
 const b2cPolicies = {
     names: {
-        signUpSignIn: "B2C_1A_SIGNUP_SIGNIN",
+        signUpSignIn: "B2C_1_susi",
         editProfile: "B2C_1_edit_profile",
         resetPassword: "B2C_1_reset_password"
     },
     authorities: {
         signUpSignIn: {
-            authority: "https://ncfpoc.b2clogin.com/ncfpoc.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN",
+            authority: "https://ncfpoc.b2clogin.com/ncfpoc.onmicrosoft.com/B2C_1_susi",
         },
         editProfile: {
             authority: "https://ncfpoc.b2clogin.com/ncfpoc.onmicrosoft.com/B2C_1_edit_profile"
